@@ -1,0 +1,36 @@
+<header class="toolbar">
+  <button mat-icon-button class="mobile-hamburger-menu" aria-label="Example icon-button with menu icon" (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <img class="logo" [alt]="applicationName" [src]="appLogo">
+
+  <span class="app-name" > {{ applicationName }} </span>
+
+  <nav *ngIf="isMobileMenuOpen" class="mobile-menu">
+    <ul>
+      <li><a href="#" (click)="goToSearch()">Recherche</a></li>
+    </ul>
+  </nav>
+
+  <nav *ngIf="!isMobileMenuOpen" class="desktop-menu">
+    <button class="toolbar-button" (click)="goToSearch()">Recherche</button>
+  </nav>
+
+
+  <div *ngIf="isLoggedIn" class="user-menu-container">
+    <button mat-icon-button class="user-icon" aria-label="Example icon-button with menu icon" (click)="toggleUserMenu()">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <nav *ngIf="isUserMenuOpen" class="user-menu">
+      <ul>
+        <li><a href="#">Mon Profil</a></li>
+        <li><a href="#">Paramètres</a></li>
+        <li><a href="#" (click)="logout()">Déconnexion</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

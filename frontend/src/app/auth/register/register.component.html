@@ -1,0 +1,15 @@
+<div class="register-container">
+  <form class="register-form">
+    <img class="cat-on-menu" src="../../../assets/cat-on-menu.png">
+    <h1>Enregistrement</h1>
+    <div class="input-group">
+      <label for="username">Nom d'utilisateur</label>
+      <input type="text" id="username" [(ngModel)]="username" name="username" required>
+    </div>
+    <div class="input-group">
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" [(ngModel)]="password" name="password" required>
+    </div>
+    <button type="submit" (click)="register()">S'enregistrer</button>
+  </form>
+</div>
