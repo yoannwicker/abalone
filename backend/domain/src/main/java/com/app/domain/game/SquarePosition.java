@@ -87,4 +87,16 @@ public record SquarePosition(int x, int y, int z) {
     public static boolean isStartingEmptyPositions(int x, int y, int z) {
         return startingEmptyPositions.contains(new SquarePosition(x, y, z));
     }
+
+    public SquarePosition moveOnX(int value) {
+        return new SquarePosition(x + value, y, z);
+    }
+
+    public SquarePosition moveOnY(int value) {
+        return new SquarePosition(x, y + value, z);
+    }
+
+    public SquarePosition moveOnZ(int value) {
+        return new SquarePosition(x, y, z + value);
+    }
 }

@@ -3,6 +3,12 @@ package com.app.domain.game;
 import static com.app.domain.game.SquarePosition.*;
 
 public class GameBoard {
+    /* TODO : idee possible
+        - avoir une liste de position de "square" valides
+        - gerer 2 listes de pions dans Game
+        - GameBoard servirait alors soit de validateur uniquement (reduire les tests au passage)
+        soit la meme utilisation que actuellement
+     */
     Square[][][] squares = new Square[17][17][17];
 
     public GameBoard() {
