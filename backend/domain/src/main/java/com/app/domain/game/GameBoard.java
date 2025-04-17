@@ -23,7 +23,11 @@ public class GameBoard {
         }
     }
 
-    public Square getSquare(int x, int y, int z) {
-        return squares[x][y][z];
+    public Square getSquare(SquarePosition squarePosition) {
+        return squares[squarePosition.x()][squarePosition.y()][squarePosition.z()];
+    }
+
+    public void setSquare(SquarePosition squarePosition, Square square) {
+        squares[squarePosition.x()][squarePosition.y()][squarePosition.z()] = square;
     }
 }

@@ -31,8 +31,9 @@ class GameBoardTest {
         })
         void should_be_a_non_existent_location(int x, int y, int z) {
             var gameBoard = new GameBoard();
+            var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.getSquare(x, y, z)).isNull();
+            assertThat(gameBoard.getSquare(squarePosition)).isNull();
         }
 
         @ParameterizedTest
@@ -54,8 +55,9 @@ class GameBoardTest {
         })
         void should_be_a_black_pawn_starting_location(int x, int y, int z) {
             var gameBoard = new GameBoard();
+            var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.getSquare(x, y, z)).isEqualTo(Square.BLACK_PAWN);
+            assertThat(gameBoard.getSquare(squarePosition)).isEqualTo(Square.BLACK_PAWN);
         }
 
         @ParameterizedTest
@@ -77,8 +79,9 @@ class GameBoardTest {
         })
         void should_be_a_white_pawn_starting_location(int x, int y, int z) {
             var gameBoard = new GameBoard();
+            var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.getSquare(x, y, z)).isEqualTo(Square.WHITE_PAWN);
+            assertThat(gameBoard.getSquare(squarePosition)).isEqualTo(Square.WHITE_PAWN);
         }
 
         @ParameterizedTest
@@ -119,8 +122,9 @@ class GameBoardTest {
         })
         void should_be_an_empty_starting_location(int x, int y, int z) {
             var gameBoard = new GameBoard();
+            var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.getSquare(x, y, z)).isEqualTo(Square.EMPTY);
+            assertThat(gameBoard.getSquare(squarePosition)).isEqualTo(Square.EMPTY);
         }
 
         @Test
@@ -130,7 +134,7 @@ class GameBoardTest {
                     .boxed()
                     .flatMap(x -> IntStream.range(0, 17).boxed()
                             .flatMap(y -> IntStream.range(0, 17).boxed()
-                                    .map(z -> gameBoard.getSquare(x, y, z))
+                                    .map(z -> gameBoard.getSquare(new SquarePosition(x, y, z)))
                                     .filter(Objects::nonNull)
                             )
                     )
@@ -138,5 +142,13 @@ class GameBoardTest {
 
             assertThat(squares).hasSize(61);
         }
+    }
+
+    @Nested
+    class UpdateSquare {
+        /* TODO :
+            - control pour ne pas remplir une position ne correspondant pas a une case
+            - control pour ne pas ecraser une case contenant deja un pion
+         */
     }
 }
