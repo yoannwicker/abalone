@@ -1,30 +1,59 @@
 package com.app.domain.game;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GameTest {
 
-    @Test
-    void white_player_should_not_be_able_to_play_first() {
-        // given
-        Game game = new Game();
+    @Nested
+    class UnexpectedArgument {
+        PawnPosition anyBlackPosition = new PawnPosition(7, 5, 7);
+        Move anyBlackMove = new Move(anyBlackPosition, Direction.FORWARD_Y);
 
-        // when then
-        assertThatThrownBy(() -> game.play(Player.WHITE, new Move()))
-                .isInstanceOf(IllegalArgumentException.class);
+        @Test
+        void white_player_should_not_be_able_to_play_first() {
+            // given
+            Game game = new Game();
+
+            // when then
+            assertThatThrownBy(() -> game.play(Player.WHITE, anyBlackMove))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
+        void player_should_not_be_able_to_play_if_it_is_not_his_turn() {
+            // given
+            Game game = new Game();
+            game.play(Player.BLACK, anyBlackMove);
+
+            // when then
+            assertThatThrownBy(() -> game.play(Player.BLACK, anyBlackMove))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
     }
 
-    @Test
-    void player_should_not_be_able_to_play_if_it_is_not_his_turn() {
-        // given
-        Game game = new Game();
-        game.play(Player.BLACK, new Move());
+    @Nested
+    class PushingPawns {
+        @Test
+        void push_one_pawn() {
+            // given
+            Game game = new Game();
+            PawnPosition blackPosition = new PawnPosition(6, 4, 6);
+            Move move = new Move(blackPosition, Direction.FORWARD_Y);
 
-        // when then
-        assertThatThrownBy(() -> game.play(Player.BLACK, new Move()))
-                .isInstanceOf(IllegalArgumentException.class);
+            // when
+            game.play(Player.BLACK, move);
+
+            // then
+        }
+    }
+
+    @Nested
+    class MovePawnsBack {
+        @Test
+        void move_one_pawn() {}
     }
 
 }
