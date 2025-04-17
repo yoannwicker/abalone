@@ -9,7 +9,7 @@ class GameTest {
 
     @Nested
     class UnexpectedArgument {
-        PawnPosition anyBlackPosition = new PawnPosition(7, 5, 7);
+        SquarePosition anyBlackPosition = new SquarePosition(7, 5, 7);
         Move anyBlackMove = new Move(anyBlackPosition, Direction.FORWARD_Y);
 
         @Test
@@ -40,7 +40,7 @@ class GameTest {
         void push_one_pawn() {
             // given
             Game game = new Game();
-            PawnPosition blackPosition = new PawnPosition(6, 4, 6);
+            SquarePosition blackPosition = new SquarePosition(6, 4, 6);
             Move move = new Move(blackPosition, Direction.FORWARD_Y);
 
             // when

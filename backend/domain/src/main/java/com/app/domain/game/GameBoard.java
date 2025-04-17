@@ -1,6 +1,6 @@
 package com.app.domain.game;
 
-import static com.app.domain.game.PawnPosition.*;
+import static com.app.domain.game.SquarePosition.*;
 
 public class GameBoard {
     Square[][][] squares = new Square[17][17][17];
