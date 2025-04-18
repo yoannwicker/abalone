@@ -3,6 +3,7 @@ package com.app.domain.game;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GameTest {
@@ -10,7 +11,8 @@ class GameTest {
     @Nested
     class UnexpectedArgument {
         SquarePosition anyBlackPosition = new SquarePosition(6, 4, 6);
-        Move anyBlackMove = new Move(anyBlackPosition, Direction.FORWARD_Y);
+        Pawn blackPawn = new Pawn(anyBlackPosition);
+        Move anyBlackMove = new Move(blackPawn, Direction.FORWARD_Y);
 
         @Test
         void white_player_should_not_be_able_to_play_first() {
@@ -37,16 +39,20 @@ class GameTest {
     @Nested
     class PushingPawns {
         @Test
-        void push_one_pawn() {
+        void move_forward_one_pawn_in_Y() {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(6, 4, 6);
-            Move move = new Move(blackPosition, Direction.FORWARD_Y);
+            Pawn pawn = new Pawn(blackPosition);
+            Move move = new Move(pawn, Direction.FORWARD_Y);
 
             // when
-            game.play(Player.BLACK, move);
+            var movedPawn = game.play(Player.BLACK, move);
 
             // then
+            var expectedPosition = new SquarePosition(7, 6, 7);
+            var expectedPawn = new Pawn(expectedPosition);
+            assertThat(movedPawn).isEqualTo(expectedPawn);
         }
     }
 

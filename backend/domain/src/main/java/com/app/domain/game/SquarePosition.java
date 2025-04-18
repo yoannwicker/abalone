@@ -5,6 +5,8 @@ import java.util.Set;
 // TODO: renommer pour Position ?
 public record SquarePosition(int x, int y, int z) {
 
+    // TODO: initialiser une liste de pion avec les positions ci-dessous
+    // TODO: ajouter la couleur pour chaque pion
     private static final Set<SquarePosition> startingPositionsOfBlackPawns = Set.of(
             new SquarePosition(4, 0, 4),
             new SquarePosition(6, 1, 3),
@@ -40,15 +42,11 @@ public record SquarePosition(int x, int y, int z) {
             new SquarePosition(10, 12, 10)
     );
 
-    public SquarePosition moveOnX(int value) {
-        return new SquarePosition(x + value, y, z);
-    }
-
-    public SquarePosition moveOnY(int value) {
-        return new SquarePosition(x, y + value, z);
-    }
-
-    public SquarePosition moveOnZ(int value) {
-        return new SquarePosition(x, y, z + value);
+    public SquarePosition update(Direction direction) {
+        return switch (direction) {
+            case FORWARD_X -> new SquarePosition(x + 2, y + 1, z -1);
+            case FORWARD_Y -> new SquarePosition(x + 1, y + 2, z + 1);
+            case FORWARD_Z -> new SquarePosition(x - 1, y + 1, z + 2);
+        };
     }
 }

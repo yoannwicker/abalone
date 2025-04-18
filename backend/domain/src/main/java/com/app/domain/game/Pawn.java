@@ -74,4 +74,8 @@ public record Pawn(SquarePosition squarePosition) {
             throw new IllegalArgumentException("Invalid square position for pawn: " + squarePosition);
         }
     }
+
+    public Pawn move(Direction direction) {
+        return new Pawn(squarePosition.update(direction));
+    }
 }
