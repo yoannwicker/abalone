@@ -2,6 +2,7 @@ package com.app.domain.game;
 
 public record Move(SquarePosition initialPosition, Direction direction) {
 
+    // TODO : mettre dans une class Pawn + validation de la position
     public SquarePosition futurePosition() {
         return switch (direction) {
             case FORWARD_X -> initialPosition.moveOnX(2);

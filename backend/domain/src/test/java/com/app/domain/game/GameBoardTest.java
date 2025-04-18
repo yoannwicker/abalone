@@ -6,7 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GameBoardTest {
 
     @Nested
-    class StartingPosition {
+    class ValidPosition {
 
         @ParameterizedTest
         @CsvSource({
@@ -29,11 +28,11 @@ class GameBoardTest {
                 "   15 ,   16  ,    16  ",
                 "   14 ,   16  ,    16  ",
         })
-        void should_be_a_non_existent_location(int x, int y, int z) {
+        void should_be_an_invalid_square_location(int x, int y, int z) {
             var gameBoard = new GameBoard();
             var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.getSquare(squarePosition)).isNull();
+            assertThat(gameBoard.validSquarePosition(squarePosition)).isFalse();
         }
 
         @ParameterizedTest
@@ -51,17 +50,7 @@ class GameBoardTest {
                 "   13 ,   6   ,    1   ",
                 "   6  ,   4   ,    6   ",
                 "   8  ,   5   ,    5   ",
-                "   10 ,   6   ,    4   "
-        })
-        void should_be_a_black_pawn_starting_location(int x, int y, int z) {
-            var gameBoard = new GameBoard();
-            var squarePosition = new SquarePosition(x, y, z);
-
-            assertThat(gameBoard.getSquare(squarePosition)).isEqualTo(Square.BLACK_PAWN);
-        }
-
-        @ParameterizedTest
-        @CsvSource({
+                "   10 ,   6   ,    4   ",
                 "   4  ,   12  ,    16  ",
                 "   6  ,   13  ,    15  ",
                 "   8  ,   14  ,    14  ",
@@ -75,17 +64,7 @@ class GameBoardTest {
                 "   13 ,   15  ,    10  ",
                 "   6  ,   10  ,    12  ",
                 "   8  ,   11  ,    11  ",
-                "   10 ,   12  ,    10  "
-        })
-        void should_be_a_white_pawn_starting_location(int x, int y, int z) {
-            var gameBoard = new GameBoard();
-            var squarePosition = new SquarePosition(x, y, z);
-
-            assertThat(gameBoard.getSquare(squarePosition)).isEqualTo(Square.WHITE_PAWN);
-        }
-
-        @ParameterizedTest
-        @CsvSource({
+                "   10 ,   12  ,    10  ",
                 "   2  ,   2   ,    8   ",
                 "   4  ,   3   ,    7   ",
                 "   12 ,   7   ,    3   ",
@@ -120,22 +99,22 @@ class GameBoardTest {
                 "   12 ,   13  ,    9   ",
                 "   14 ,   14  ,    8   "
         })
-        void should_be_an_empty_starting_location(int x, int y, int z) {
+        void should_be_a_valid_square_location(int x, int y, int z) {
             var gameBoard = new GameBoard();
             var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.getSquare(squarePosition)).isEqualTo(Square.EMPTY);
+            assertThat(gameBoard.validSquarePosition(squarePosition)).isTrue();
         }
 
         @Test
         void should_have_61_squares() {
             var gameBoard = new GameBoard();
-            List<Square> squares = IntStream.range(0, 17)
+            List<SquarePosition> squares = IntStream.range(0, 17)
                     .boxed()
                     .flatMap(x -> IntStream.range(0, 17).boxed()
                             .flatMap(y -> IntStream.range(0, 17).boxed()
-                                    .map(z -> gameBoard.getSquare(new SquarePosition(x, y, z)))
-                                    .filter(Objects::nonNull)
+                                    .map(z -> new SquarePosition(x, y, z))
+                                    .filter(gameBoard::validSquarePosition)
                             )
                     )
                     .toList();

@@ -14,14 +14,6 @@ public class Game {
             throw new IllegalArgumentException();
         }
 
-        var initialSquareContent = gameBoard.getSquare(move.initialPosition());
-        if (player.equals(Player.BLACK) && initialSquareContent != Square.BLACK_PAWN
-                || player.equals(Player.WHITE) && initialSquareContent != Square.WHITE_PAWN) {
-            throw new IllegalArgumentException();
-        }
-
-        // TODO : suivre TODO GameBoard car ca ne marche pas en l'etat
-        var futurSquareContent = gameBoard.getSquare(move.futurePosition());
 
         playerTurn = player.nextPlayer();
     }
