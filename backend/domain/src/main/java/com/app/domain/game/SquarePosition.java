@@ -69,6 +69,44 @@ public record SquarePosition(int x, int y, int z) {
             new SquarePosition(13, 15, 10)
     );
 
+    private static final Set<SquarePosition> ELIMINATORY_POSITIONS = Set.of(
+            new SquarePosition(5, -1, 2),
+            new SquarePosition(7, 0, 1),
+            new SquarePosition(9, 1, 0),
+            new SquarePosition(11, 2, -1),
+            new SquarePosition(13, 3, -2),
+
+            new SquarePosition(14, 5, -1),
+            new SquarePosition(15, 7, 0),
+            new SquarePosition(16, 9, 1),
+            new SquarePosition(17, 11, 2),
+            new SquarePosition(18, 13, 3),
+
+            new SquarePosition(17, 14, 5),
+            new SquarePosition(16, 15, 7),
+            new SquarePosition(15, 16, 9),
+            new SquarePosition(14, 17, 11),
+            new SquarePosition(13, 18, 13),
+
+            new SquarePosition(11, 17, 14),
+            new SquarePosition(9, 16, 15),
+            new SquarePosition(7, 15, 16),
+            new SquarePosition(5, 14, 17),
+            new SquarePosition(3, 13, 18),
+
+            new SquarePosition(2, 11, 17),
+            new SquarePosition(1, 9, 16),
+            new SquarePosition(0, 7, 15),
+            new SquarePosition(-1, 5, 14),
+            new SquarePosition(-2, 3, 13),
+
+            new SquarePosition(-1, 2, 11),
+            new SquarePosition(0, 1, 9),
+            new SquarePosition(1, 0, 7),
+            new SquarePosition(2, -1, 5),
+            new SquarePosition(3, -2, 3)
+    );
+
     public SquarePosition update(Direction direction) {
         return switch (direction) {
             case MOVE_FORWARD_X -> new SquarePosition(x + 2, y + 1, z - 1);
@@ -82,5 +120,9 @@ public record SquarePosition(int x, int y, int z) {
 
     public boolean isValid() {
         return VALID_POSITIONS.contains(this);
+    }
+
+    public boolean isEliminatory() {
+        return ELIMINATORY_POSITIONS.contains(this);
     }
 }

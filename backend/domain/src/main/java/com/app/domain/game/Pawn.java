@@ -1,5 +1,6 @@
 package com.app.domain.game;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,7 +58,11 @@ public record Pawn(SquarePosition squarePosition) {
         }
     }
 
-    public Pawn move(Direction direction) {
-        return new Pawn(squarePosition.update(direction));
+    public Optional<Pawn> move(Direction direction) {
+        SquarePosition newPosition = squarePosition.update(direction);
+        if (newPosition.isEliminatory()) {
+            return Optional.empty();
+        }
+        return Optional.of(new Pawn(newPosition));
     }
 }

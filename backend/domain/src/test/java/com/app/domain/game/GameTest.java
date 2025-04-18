@@ -3,6 +3,8 @@ package com.app.domain.game;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static com.app.domain.game.PawnFixture.blackPawnMidboard;
+import static com.app.domain.game.PawnFixture.whitePawnMidboard;
 import static org.assertj.core.api.Assertions.*;
 
 class GameTest {
@@ -52,7 +54,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(12, 7, 3);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).isEqualTo(expectedPawn);
+            assertThat(movedPawn).contains(expectedPawn);
         }
 
         @Test
@@ -72,7 +74,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(4, 9, 13 );
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).isEqualTo(expectedPawn);
+            assertThat(movedPawn).contains(expectedPawn);
         }
 
         @Test
@@ -89,7 +91,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(7, 6, 7);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).isEqualTo(expectedPawn);
+            assertThat(movedPawn).contains(expectedPawn);
         }
 
         @Test
@@ -109,7 +111,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(9, 10, 9 );
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).isEqualTo(expectedPawn);
+            assertThat(movedPawn).contains(expectedPawn);
         }
 
         @Test
@@ -126,7 +128,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(5, 5, 8);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).isEqualTo(expectedPawn);
+            assertThat(movedPawn).contains(expectedPawn);
         }
 
         @Test
@@ -146,7 +148,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(11, 11, 8);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).isEqualTo(expectedPawn);
+            assertThat(movedPawn).contains(expectedPawn);
         }
 
         @Test
@@ -190,10 +192,106 @@ class GameTest {
 
             // when then
             assertThatCode(() -> {
-                game.play(Player.BLACK, new Move(movedBlackPawn, Direction.MOVE_FORWARD_X));
-                game.play(Player.WHITE, new Move(movedWhitePawn, Direction.MOVE_BACK_X));
+                game.play(Player.BLACK, new Move(movedBlackPawn.orElseThrow(), Direction.MOVE_FORWARD_X));
+                game.play(Player.WHITE, new Move(movedWhitePawn.orElseThrow(), Direction.MOVE_BACK_X));
             }).doesNotThrowAnyException();
         }
+
+        @Test
+        void should_not_be_able_to_move_a_black_pawn_when_there_is_already_a_black_pawn_on_it() {
+            // given
+            Game game = new Game();
+            SquarePosition blackPosition = new SquarePosition(10, 6, 4);
+            Pawn pawn = new Pawn(blackPosition);
+
+            // when then
+            Move move = new Move(pawn, Direction.MOVE_BACK_X);
+            assertThatThrownBy(() -> game.play(Player.BLACK, move))
+                    .isInstanceOf(IllegalStateException.class);
+        }
+
+        @Test
+        void should_not_be_able_to_move_a_white_pawn_when_there_is_already_a_white_pawn_on_it() {
+            // given
+            Game game = new Game();
+
+            Pawn blackPawn = new Pawn(new SquarePosition(10, 6, 4));
+            game.play(Player.BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
+
+            Pawn pawn = new Pawn(new SquarePosition(6, 10, 12));
+
+            // when
+            Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
+            assertThatThrownBy(() -> game.play(Player.WHITE, move))
+                    .isInstanceOf(IllegalStateException.class);
+        }
+
+        @Test
+        void should_not_be_able_to_move_a_black_pawn_when_there_is_already_a_white_pawn_on_it() {
+            // given
+            Game game = new Game(Player.BLACK, blackPawnMidboard(), whitePawnMidboard());
+            Pawn pawn = new Pawn(new SquarePosition(8, 8, 8));
+
+            // when then
+            Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
+            assertThatThrownBy(() -> game.play(Player.BLACK, move))
+                    .isInstanceOf(IllegalStateException.class);
+        }
+
+        @Test
+        void should_not_be_able_to_move_a_white_pawn_when_there_is_already_a_black_pawn_on_it() {
+            // given
+            Game game = new Game(Player.WHITE, blackPawnMidboard(), whitePawnMidboard());
+            Pawn pawn = new Pawn(new SquarePosition(7, 9, 10));
+
+            // when then
+            Move move = new Move(pawn, Direction.MOVE_BACK_X);
+            assertThatThrownBy(() -> game.play(Player.WHITE, move))
+                    .isInstanceOf(IllegalStateException.class);
+        }
+
+        @Test
+        void should_lose_black_pawn() {
+            // given
+            Game game = new Game();
+            SquarePosition blackPosition = new SquarePosition(4, 0, 4);
+            Pawn pawn = new Pawn(blackPosition);
+
+            // when
+            Move move = new Move(pawn, Direction.MOVE_BACK_X);
+            var movedPawn = game.play(Player.BLACK, move);
+
+            // then
+            assertThat(movedPawn).isEmpty();
+        }
+    }
+
+    @Nested
+    class MoveTwoPawnsOnALine {
+        // TODO: deplacer les pions ennemis si seul
+        // TODO: deplacer les pions ennemis si pas de pions allie colle derriere
+    }
+
+    @Nested
+    class MoveThreePawnsOnALine {
+        // TODO: deplacer les pions ennemis si moins de 3
+        // TODO: deplacer les pions ennemis si pas de pions allie colle derriere
+        // TODO: impossible de deplacer plus de 3 pions
+    }
+
+    // TODO: gameStatus -> Enum contenant Optional<Player> (adversaire = moins de 9 pions : 6 de perdu).
+    // TODO: le joueur qui joue peut perdre aussi
+    // TODO: if isWinBy empty -> coup autorise
+
+
+    @Nested
+    class MoveTwoPawnsToSide {
+        // TODO
+    }
+
+    @Nested
+    class MoveThreePawnsToSide {
+        // TODO
     }
 
 }
