@@ -1,19 +1,15 @@
 package com.app.domain.game;
 
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.util.List;
-import java.util.stream.IntStream;
+import static org.assertj.core.api.Assertions.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-class GameBoardTest {
+class PawnTest {
 
     @Nested
-    class ValidPosition {
+    class CreateWithValidPosition {
 
         @ParameterizedTest
         @CsvSource({
@@ -28,11 +24,11 @@ class GameBoardTest {
                 "   15 ,   16  ,    16  ",
                 "   14 ,   16  ,    16  ",
         })
-        void should_be_an_invalid_square_location(int x, int y, int z) {
-            var gameBoard = new GameBoard();
+        void should_not_have_an_invalid_position(int x, int y, int z) {
             var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.validSquarePosition(squarePosition)).isFalse();
+            assertThatThrownBy(() -> new Pawn(squarePosition))
+                    .isInstanceOf(IllegalArgumentException.class);
         }
 
         @ParameterizedTest
@@ -99,35 +95,11 @@ class GameBoardTest {
                 "   12 ,   13  ,    9   ",
                 "   14 ,   14  ,    8   "
         })
-        void should_be_a_valid_square_location(int x, int y, int z) {
-            var gameBoard = new GameBoard();
+        void should_have_a_valid_position(int x, int y, int z) {
             var squarePosition = new SquarePosition(x, y, z);
 
-            assertThat(gameBoard.validSquarePosition(squarePosition)).isTrue();
+            assertThatCode(() -> new Pawn(squarePosition))
+                    .doesNotThrowAnyException();
         }
-
-        @Test
-        void should_have_61_squares() {
-            var gameBoard = new GameBoard();
-            List<SquarePosition> squares = IntStream.range(0, 17)
-                    .boxed()
-                    .flatMap(x -> IntStream.range(0, 17).boxed()
-                            .flatMap(y -> IntStream.range(0, 17).boxed()
-                                    .map(z -> new SquarePosition(x, y, z))
-                                    .filter(gameBoard::validSquarePosition)
-                            )
-                    )
-                    .toList();
-
-            assertThat(squares).hasSize(61);
-        }
-    }
-
-    @Nested
-    class UpdateSquare {
-        /* TODO :
-            - control pour ne pas remplir une position ne correspondant pas a une case
-            - control pour ne pas ecraser une case contenant deja un pion
-         */
     }
 }

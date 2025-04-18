@@ -3,9 +3,9 @@ package com.app.domain.game;
 import java.util.Set;
 
 // TODO : Renommer en Pawns
-public class GameBoard {
+public record Pawn(SquarePosition squarePosition) {
 
-    private static final Set<SquarePosition> squarePositions = Set.of(
+    private static final Set<SquarePosition> VALID_POSITIONS = Set.of(
             new SquarePosition(4, 0, 4),
             new SquarePosition(6, 1, 3),
             new SquarePosition(8, 2, 2),
@@ -69,7 +69,9 @@ public class GameBoard {
             new SquarePosition(13, 15, 10)
     );
 
-    public boolean validSquarePosition(SquarePosition squarePosition) {
-        return squarePositions.contains(squarePosition);
+    public Pawn {
+        if (!VALID_POSITIONS.contains(squarePosition)) {
+            throw new IllegalArgumentException("Invalid square position for pawn: " + squarePosition);
+        }
     }
 }

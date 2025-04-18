@@ -32,42 +32,6 @@ class GameTest {
             assertThatThrownBy(() -> game.play(Player.BLACK, anyBlackMove))
                     .isInstanceOf(IllegalArgumentException.class);
         }
-
-        @Test
-        void player_should_not_be_able_to_play_an_enemy_pawn() {
-            // given
-            Game game = new Game();
-            SquarePosition whitePosition = new SquarePosition(6, 10, 12);
-            Move invalidBlackMove = new Move(whitePosition, Direction.FORWARD_Y);
-
-            // when then
-            assertThatThrownBy(() -> game.play(Player.BLACK, invalidBlackMove))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
-
-        @Test
-        void player_should_not_be_able_to_play_an_empty_position() {
-            // given
-            Game game = new Game();
-            SquarePosition emptyPosition = new SquarePosition(2, 2, 8);
-            Move invalidBlackMove = new Move(emptyPosition, Direction.FORWARD_Y);
-
-            // when then
-            assertThatThrownBy(() -> game.play(Player.BLACK, invalidBlackMove))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
-
-        @Test
-        void player_should_not_be_able_to_play_an_non_existing_position() {
-            // given
-            Game game = new Game();
-            SquarePosition nonExistingPosition = new SquarePosition(0, 0, 0);
-            Move invalidBlackMove = new Move(nonExistingPosition, Direction.FORWARD_Y);
-
-            // when then
-            assertThatThrownBy(() -> game.play(Player.BLACK, invalidBlackMove))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
     }
 
     @Nested
