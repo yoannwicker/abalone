@@ -1,5 +1,6 @@
 package com.app.domain.game;
 
 public enum Direction {
-    FORWARD_X, FORWARD_Y, FORWARD_Z
+    MOVE_FORWARD_X, MOVE_FORWARD_Y, MOVE_FORWARD_Z,
+    MOVE_BACK_X, MOVE_BACK_Y, MOVE_BACK_Z
 }
