@@ -10,7 +10,7 @@ public record Move(Set<Pawn> pawns, Direction direction) {
         this(Set.of(pawn), direction);
     }
 
-    public Set<Pawn> movePawn() {
+    public Set<Pawn> movePawns() {
         return pawns.stream()
                 .map(pawn -> pawn.move(direction))
                 .flatMap(Optional::stream)

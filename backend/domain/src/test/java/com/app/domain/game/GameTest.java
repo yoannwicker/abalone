@@ -3,6 +3,8 @@ package com.app.domain.game;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.app.domain.game.PawnFixture.blackPawnMidboard;
@@ -279,7 +281,8 @@ class GameTest {
             Pawn secondPawn = new Pawn(new SquarePosition(6, 4, 6));
 
             // when
-            Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
+            LinkedHashSet<Pawn> pawnsToMove = new LinkedHashSet<>(List.of(firstPawn, secondPawn));
+            Move move = new Move(pawnsToMove, Direction.MOVE_FORWARD_Y);
             var movedPawn = game.play(Player.BLACK, move);
 
             // then

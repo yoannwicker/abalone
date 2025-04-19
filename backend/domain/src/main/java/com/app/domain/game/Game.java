@@ -30,12 +30,10 @@ public class Game {
             throw new IllegalArgumentException();
         }
 
-        var movedPawns = move.movePawn();
-        movedPawns.forEach(pawn -> {
-            if (blackPawns.contains(pawn) || whitePawns.contains(pawn)) {
-                throw new IllegalStateException("Cannot move pawn to occupied square at " + pawn);
-            }
-        });
+        var oneOfPawnsToMove = move.pawns().stream().findFirst().orElseThrow();
+        findPawnInFront(move, oneOfPawnsToMove);
+
+        var movedPawns = move.movePawns();
 
         if (Player.BLACK.equals(player)) {
             blackPawns.removeAll(move.pawns());
@@ -49,5 +47,20 @@ public class Game {
 
         playerTurn = player.nextPlayer();
         return movedPawns;
+    }
+
+    private void findPawnInFront(Move move, Pawn oneOfPawnsToMove) {
+        var movedPawn = oneOfPawnsToMove.move(move.direction());
+        movedPawn.ifPresent(pawn -> {
+            if (move.pawns().contains(pawn)) {
+                findPawnInFront(move, pawn);
+                return;
+            }
+            if (blackPawns.contains(pawn) || whitePawns.contains(pawn)) {
+                throw new IllegalStateException("Cannot move pawn to occupied square at " + pawn);
+            }
+        });
+        // TODO: eliminaton du pion
+        // TODO: ajouter les pions blancs identifies aux pions a deplacer
     }
 }
