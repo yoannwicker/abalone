@@ -1,6 +1,8 @@
 package com.app.domain.game;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public record Move(Set<Pawn> pawns, Direction direction) {
 
@@ -9,6 +11,9 @@ public record Move(Set<Pawn> pawns, Direction direction) {
     }
 
     public Set<Pawn> movePawn() {
-        return pawns.stream().findAny().orElseThrow().move(direction);
+        return pawns.stream()
+                .map(pawn -> pawn.move(direction))
+                .flatMap(Optional::stream)
+                .collect(Collectors.toSet());
     }
 }

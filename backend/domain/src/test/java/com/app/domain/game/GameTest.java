@@ -56,7 +56,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(12, 7, 3);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).contains(expectedPawn);
+            assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
         @Test
@@ -76,7 +76,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(4, 9, 13 );
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).contains(expectedPawn);
+            assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
         @Test
@@ -93,7 +93,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(7, 6, 7);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).contains(expectedPawn);
+            assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
         @Test
@@ -113,7 +113,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(9, 10, 9 );
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).contains(expectedPawn);
+            assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
         @Test
@@ -130,7 +130,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(5, 5, 8);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).contains(expectedPawn);
+            assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
         @Test
@@ -150,7 +150,7 @@ class GameTest {
             // then
             var expectedPosition = new SquarePosition(11, 11, 8);
             var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).contains(expectedPawn);
+            assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
         @Test
@@ -253,7 +253,7 @@ class GameTest {
         }
 
         @Test
-        void should_lose_black_pawn() {
+        void should_lose_pawn() {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(4, 0, 4);
@@ -283,9 +283,38 @@ class GameTest {
             var movedPawn = game.play(Player.BLACK, move);
 
             // then
-            var expectedPosition = new SquarePosition(7, 6, 7);
-            var expectedPawn = new Pawn(expectedPosition);
-            assertThat(movedPawn).contains(expectedPawn);
+            var expectedFirstPawn = new Pawn(new SquarePosition(6, 4, 6));
+            var expectedSecondPawn = new Pawn(new SquarePosition(7, 6, 7));
+            assertThat(movedPawn).containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn);
+        }
+
+        @Test
+        void move_two_pawns_and_lose_one_pawn() {
+            // given
+            Game game = new Game();
+            Pawn firstPawn = new Pawn(new SquarePosition(4, 0, 4));
+            Pawn secondPawn = new Pawn(new SquarePosition(5, 2, 5));
+
+            // when
+            Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_BACK_Y);
+            var movedPawn = game.play(Player.BLACK, move);
+
+            // then
+            var expectedPawn = new Pawn(new SquarePosition(4, 0, 4));
+            assertThat(movedPawn).containsExactly(expectedPawn);
+        }
+
+        @Test
+        void should_not_be_able_to_move_two_black_pawns_when_there_is_already_a_black_pawn_on_it() {
+            // given
+            Game game = new Game();
+            Pawn firstPawn = new Pawn(new SquarePosition(4, 0, 4));
+            Pawn secondPawn = new Pawn(new SquarePosition(5, 2, 5));
+
+            // when then
+            Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
+            assertThatThrownBy(() -> game.play(Player.BLACK, move))
+                    .isInstanceOf(IllegalStateException.class);
         }
 
 
