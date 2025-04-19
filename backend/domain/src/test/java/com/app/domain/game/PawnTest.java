@@ -27,7 +27,7 @@ class PawnTest {
         void should_not_have_an_invalid_position(int x, int y, int z) {
             var squarePosition = new SquarePosition(x, y, z);
 
-            assertThatThrownBy(() -> new Pawn(squarePosition))
+            assertThatThrownBy(() -> new Pawn(Player.BLACK, squarePosition))
                     .isInstanceOf(IllegalArgumentException.class);
         }
 
@@ -98,7 +98,7 @@ class PawnTest {
         void should_have_a_valid_position(int x, int y, int z) {
             var squarePosition = new SquarePosition(x, y, z);
 
-            assertThatCode(() -> new Pawn(squarePosition))
+            assertThatCode(() -> new Pawn(Player.BLACK, squarePosition))
                     .doesNotThrowAnyException();
         }
     }

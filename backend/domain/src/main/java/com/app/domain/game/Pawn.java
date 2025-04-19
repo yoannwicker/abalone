@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public record Pawn(SquarePosition squarePosition) {
+public record Pawn(Player player, SquarePosition squarePosition) {
 
     // TODO : Ajouter la Couleur du pion (Player)
 
@@ -44,13 +44,13 @@ public record Pawn(SquarePosition squarePosition) {
 
     public static Set<Pawn> createBlackPawns() {
         return BLACK_PAWN_INITIAL_POSITIONS.stream()
-                .map(Pawn::new)
+                .map(squarePosition -> new Pawn(Player.BLACK, squarePosition))
                 .collect(Collectors.toSet());
     }
 
     public static Set<Pawn> createWhitePawns() {
         return WHITE_PAWN_INITIAL_POSITIONS.stream()
-                .map(Pawn::new)
+                .map(squarePosition -> new Pawn(Player.WHITE, squarePosition))
                 .collect(Collectors.toSet());
     }
 
@@ -65,6 +65,6 @@ public record Pawn(SquarePosition squarePosition) {
         if (newPosition.isEliminatory()) {
             return Optional.empty();
         }
-        return Optional.of(new Pawn(newPosition));
+        return Optional.of(new Pawn(player, newPosition));
     }
 }

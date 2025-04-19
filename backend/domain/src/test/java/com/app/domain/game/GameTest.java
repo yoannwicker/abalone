@@ -16,7 +16,7 @@ class GameTest {
     @Nested
     class PlayerTurn {
         SquarePosition anyBlackPosition = new SquarePosition(6, 4, 6);
-        Pawn blackPawn = new Pawn(anyBlackPosition);
+        Pawn blackPawn = new Pawn(Player.BLACK, anyBlackPosition);
         Move anyBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
 
         @Test
@@ -49,7 +49,7 @@ class GameTest {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(10, 6, 4);
-            Pawn pawn = new Pawn(blackPosition);
+            Pawn pawn = new Pawn(Player.BLACK, blackPosition);
 
             // when
             Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
@@ -57,7 +57,7 @@ class GameTest {
 
             // then
             var expectedPosition = new SquarePosition(12, 7, 3);
-            var expectedPawn = new Pawn(expectedPosition);
+            var expectedPawn = new Pawn(Player.BLACK, expectedPosition);
             assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
@@ -66,10 +66,10 @@ class GameTest {
             // given
             Game game = new Game();
 
-            Pawn blackPawn = new Pawn(new SquarePosition(10, 6, 4));
+            Pawn blackPawn = new Pawn(Player.BLACK, new SquarePosition(10, 6, 4));
             game.play(Player.BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
 
-            Pawn pawn = new Pawn(new SquarePosition(6, 10, 12));
+            Pawn pawn = new Pawn(Player.WHITE, new SquarePosition(6, 10, 12));
 
             // when
             Move move = new Move(pawn, Direction.MOVE_BACK_X);
@@ -77,7 +77,7 @@ class GameTest {
 
             // then
             var expectedPosition = new SquarePosition(4, 9, 13 );
-            var expectedPawn = new Pawn(expectedPosition);
+            var expectedPawn = new Pawn(Player.WHITE, expectedPosition);
             assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
@@ -86,7 +86,7 @@ class GameTest {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(6, 4, 6);
-            Pawn pawn = new Pawn(blackPosition);
+            Pawn pawn = new Pawn(Player.BLACK, blackPosition);
 
             // when
             Move move = new Move(pawn, Direction.MOVE_FORWARD_Y);
@@ -94,7 +94,7 @@ class GameTest {
 
             // then
             var expectedPosition = new SquarePosition(7, 6, 7);
-            var expectedPawn = new Pawn(expectedPosition);
+            var expectedPawn = new Pawn(Player.BLACK, expectedPosition);
             assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
@@ -103,10 +103,10 @@ class GameTest {
             // given
             Game game = new Game();
 
-            Pawn blackPawn = new Pawn(new SquarePosition(6, 4, 6));
+            Pawn blackPawn = new Pawn(Player.BLACK, new SquarePosition(6, 4, 6));
             game.play(Player.BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Y));
 
-            Pawn pawn = new Pawn(new SquarePosition(10, 12, 10));
+            Pawn pawn = new Pawn(Player.WHITE, new SquarePosition(10, 12, 10));
 
             // when
             Move move = new Move(pawn, Direction.MOVE_BACK_Y);
@@ -114,7 +114,7 @@ class GameTest {
 
             // then
             var expectedPosition = new SquarePosition(9, 10, 9 );
-            var expectedPawn = new Pawn(expectedPosition);
+            var expectedPawn = new Pawn(Player.WHITE, expectedPosition);
             assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
@@ -123,7 +123,7 @@ class GameTest {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(6, 4, 6);
-            Pawn pawn = new Pawn(blackPosition);
+            Pawn pawn = new Pawn(Player.BLACK, blackPosition);
 
             // when
             Move move = new Move(pawn, Direction.MOVE_FORWARD_Z);
@@ -131,7 +131,7 @@ class GameTest {
 
             // then
             var expectedPosition = new SquarePosition(5, 5, 8);
-            var expectedPawn = new Pawn(expectedPosition);
+            var expectedPawn = new Pawn(Player.BLACK, expectedPosition);
             assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
@@ -140,10 +140,10 @@ class GameTest {
             // given
             Game game = new Game();
 
-            Pawn blackPawn = new Pawn(new SquarePosition(6, 4, 6));
+            Pawn blackPawn = new Pawn(Player.BLACK, new SquarePosition(6, 4, 6));
             game.play(Player.BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Z));
 
-            Pawn pawn = new Pawn(new SquarePosition(10, 12, 10));
+            Pawn pawn = new Pawn(Player.WHITE, new SquarePosition(10, 12, 10));
 
             // when
             Move move = new Move(pawn, Direction.MOVE_BACK_Z);
@@ -151,7 +151,7 @@ class GameTest {
 
             // then
             var expectedPosition = new SquarePosition(11, 11, 8);
-            var expectedPawn = new Pawn(expectedPosition);
+            var expectedPawn = new Pawn(Player.WHITE, expectedPosition);
             assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
@@ -160,7 +160,7 @@ class GameTest {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(12, 7, 3);
-            Pawn pawn = new Pawn(blackPosition);
+            Pawn pawn = new Pawn(Player.BLACK, blackPosition);
 
             // when then
             Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
@@ -173,10 +173,10 @@ class GameTest {
             // given
             Game game = new Game();
 
-            Pawn blackPawn = new Pawn(new SquarePosition(10, 6, 4));
+            Pawn blackPawn = new Pawn(Player.BLACK, new SquarePosition(10, 6, 4));
             game.play(Player.BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
 
-            Pawn pawn = new Pawn(new SquarePosition(4, 9, 13 ));
+            Pawn pawn = new Pawn(Player.WHITE, new SquarePosition(4, 9, 13 ));
 
             // when then
             Move move = new Move(pawn, Direction.MOVE_BACK_X);
@@ -190,9 +190,9 @@ class GameTest {
             Game game = new Game();
 
             SquarePosition initialBlackPawnPosition = new SquarePosition(10, 6, 4);
-            var movedBlackPawns = game.play(Player.BLACK, new Move(new Pawn(initialBlackPawnPosition), Direction.MOVE_FORWARD_X));
+            var movedBlackPawns = game.play(Player.BLACK, new Move(new Pawn(Player.BLACK, initialBlackPawnPosition), Direction.MOVE_FORWARD_X));
             SquarePosition initialWhitePawnPosition = new SquarePosition(6, 10, 12);
-            var movedWhitePawns = game.play(Player.WHITE, new Move(new Pawn(initialWhitePawnPosition), Direction.MOVE_BACK_X));
+            var movedWhitePawns = game.play(Player.WHITE, new Move(new Pawn(Player.WHITE, initialWhitePawnPosition), Direction.MOVE_BACK_X));
 
             // when then
             assertThatCode(() -> {
@@ -206,7 +206,7 @@ class GameTest {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(10, 6, 4);
-            Pawn pawn = new Pawn(blackPosition);
+            Pawn pawn = new Pawn(Player.BLACK, blackPosition);
 
             // when then
             Move move = new Move(pawn, Direction.MOVE_BACK_X);
@@ -219,10 +219,10 @@ class GameTest {
             // given
             Game game = new Game();
 
-            Pawn blackPawn = new Pawn(new SquarePosition(10, 6, 4));
+            Pawn blackPawn = new Pawn(Player.BLACK, new SquarePosition(10, 6, 4));
             game.play(Player.BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
 
-            Pawn pawn = new Pawn(new SquarePosition(6, 10, 12));
+            Pawn pawn = new Pawn(Player.WHITE, new SquarePosition(6, 10, 12));
 
             // when
             Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
@@ -234,7 +234,7 @@ class GameTest {
         void should_not_be_able_to_move_a_black_pawn_when_there_is_already_a_white_pawn_on_it() {
             // given
             Game game = new Game(Player.BLACK, blackPawnMidboard(), whitePawnMidboard());
-            Pawn pawn = new Pawn(new SquarePosition(8, 8, 8));
+            Pawn pawn = new Pawn(Player.BLACK, new SquarePosition(8, 8, 8));
 
             // when then
             Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
@@ -246,7 +246,7 @@ class GameTest {
         void should_not_be_able_to_move_a_white_pawn_when_there_is_already_a_black_pawn_on_it() {
             // given
             Game game = new Game(Player.WHITE, blackPawnMidboard(), whitePawnMidboard());
-            Pawn pawn = new Pawn(new SquarePosition(7, 9, 10));
+            Pawn pawn = new Pawn(Player.WHITE, new SquarePosition(7, 9, 10));
 
             // when then
             Move move = new Move(pawn, Direction.MOVE_BACK_X);
@@ -259,7 +259,7 @@ class GameTest {
             // given
             Game game = new Game();
             SquarePosition blackPosition = new SquarePosition(4, 0, 4);
-            Pawn pawn = new Pawn(blackPosition);
+            Pawn pawn = new Pawn(Player.BLACK, blackPosition);
 
             // when
             Move move = new Move(pawn, Direction.MOVE_BACK_X);
@@ -277,8 +277,8 @@ class GameTest {
         void move_two_pawns() {
             // given
             Game game = new Game();
-            Pawn firstPawn = new Pawn(new SquarePosition(5, 2, 5));
-            Pawn secondPawn = new Pawn(new SquarePosition(6, 4, 6));
+            Pawn firstPawn = new Pawn(Player.BLACK, new SquarePosition(5, 2, 5));
+            Pawn secondPawn = new Pawn(Player.BLACK, new SquarePosition(6, 4, 6));
 
             // when
             LinkedHashSet<Pawn> pawnsToMove = new LinkedHashSet<>(List.of(firstPawn, secondPawn));
@@ -286,8 +286,8 @@ class GameTest {
             var movedPawn = game.play(Player.BLACK, move);
 
             // then
-            var expectedFirstPawn = new Pawn(new SquarePosition(6, 4, 6));
-            var expectedSecondPawn = new Pawn(new SquarePosition(7, 6, 7));
+            var expectedFirstPawn = new Pawn(Player.BLACK, new SquarePosition(6, 4, 6));
+            var expectedSecondPawn = new Pawn(Player.BLACK, new SquarePosition(7, 6, 7));
             assertThat(movedPawn).containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn);
         }
 
@@ -295,15 +295,15 @@ class GameTest {
         void move_two_pawns_and_lose_one_pawn() {
             // given
             Game game = new Game();
-            Pawn firstPawn = new Pawn(new SquarePosition(4, 0, 4));
-            Pawn secondPawn = new Pawn(new SquarePosition(5, 2, 5));
+            Pawn firstPawn = new Pawn(Player.BLACK, new SquarePosition(4, 0, 4));
+            Pawn secondPawn = new Pawn(Player.BLACK, new SquarePosition(5, 2, 5));
 
             // when
             Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_BACK_Y);
             var movedPawn = game.play(Player.BLACK, move);
 
             // then
-            var expectedPawn = new Pawn(new SquarePosition(4, 0, 4));
+            var expectedPawn = new Pawn(Player.BLACK, new SquarePosition(4, 0, 4));
             assertThat(movedPawn).containsExactly(expectedPawn);
         }
 
@@ -311,8 +311,8 @@ class GameTest {
         void should_not_be_able_to_move_two_black_pawns_when_there_is_already_a_black_pawn_on_it() {
             // given
             Game game = new Game();
-            Pawn firstPawn = new Pawn(new SquarePosition(4, 0, 4));
-            Pawn secondPawn = new Pawn(new SquarePosition(5, 2, 5));
+            Pawn firstPawn = new Pawn(Player.BLACK, new SquarePosition(4, 0, 4));
+            Pawn secondPawn = new Pawn(Player.BLACK, new SquarePosition(5, 2, 5));
 
             // when then
             Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
@@ -324,17 +324,17 @@ class GameTest {
         void move_two_pawns_and_one_opponent_pawn() {
             // given
             Game game = new Game(Player.BLACK, blackPawnMidboard(), whitePawnMidboard());
-            Pawn firstPawn = new Pawn(new SquarePosition(10, 6, 4));
-            Pawn secondPawn = new Pawn(new SquarePosition(11, 8, 5));
+            Pawn firstPawn = new Pawn(Player.BLACK, new SquarePosition(10, 6, 4));
+            Pawn secondPawn = new Pawn(Player.BLACK, new SquarePosition(11, 8, 5));
 
             // when
             Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
             var movedPawn = game.play(Player.BLACK, move);
 
             // then
-            Pawn expectedFirstPawn = new Pawn(new SquarePosition(11, 8, 5));
-            Pawn expectedSecondPawn = new Pawn(new SquarePosition(12, 10, 6));
-            Pawn expectedMovedWhitePawn = new Pawn(new SquarePosition(13, 12, 7));
+            Pawn expectedFirstPawn = new Pawn(Player.BLACK, new SquarePosition(11, 8, 5));
+            Pawn expectedSecondPawn = new Pawn(Player.BLACK, new SquarePosition(12, 10, 6));
+            Pawn expectedMovedWhitePawn = new Pawn(Player.BLACK, new SquarePosition(13, 12, 7));
             assertThat(movedPawn).containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedMovedWhitePawn);
         }
 

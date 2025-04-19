@@ -19,7 +19,9 @@ public class PawnFixture {
     );
 
     public static Set<Pawn> blackPawnMidboard() {
-        return BLACK_PAWN_MIDBOARD_POSITIONS.stream().map(Pawn::new).collect(Collectors.toSet());
+        return BLACK_PAWN_MIDBOARD_POSITIONS.stream()
+                .map(squarePosition -> new Pawn(Player.BLACK, squarePosition))
+                .collect(Collectors.toSet());
     }
 
     private static final Set<SquarePosition> WHITE_PAWN_MIDBOARD_POSITIONS = Set.of(
@@ -38,6 +40,8 @@ public class PawnFixture {
     );
 
     public static Set<Pawn> whitePawnMidboard() {
-        return WHITE_PAWN_MIDBOARD_POSITIONS.stream().map(Pawn::new).collect(Collectors.toSet());
+        return WHITE_PAWN_MIDBOARD_POSITIONS.stream()
+                .map(squarePosition -> new Pawn(Player.WHITE, squarePosition))
+                .collect(Collectors.toSet());
     }
 }
