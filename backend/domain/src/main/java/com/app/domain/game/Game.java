@@ -1,6 +1,9 @@
 package com.app.domain.game;
 
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Game {
     private Player playerTurn;
@@ -31,7 +34,7 @@ public class Game {
         }
 
         var oneOfPawnsToMove = move.pawns().stream().findFirst().orElseThrow();
-        findPawnInFront(move, oneOfPawnsToMove);
+        collectFrontPawnsToPush(move, oneOfPawnsToMove);
 
         var movedPawns = move.movePawns();
 
@@ -49,17 +52,30 @@ public class Game {
         return movedPawns;
     }
 
-    private void findPawnInFront(Move move, Pawn oneOfPawnsToMove) {
+    private Set<Pawn> collectFrontPawnsToPush(Move move, Pawn oneOfPawnsToMove) {
         var movedPawn = oneOfPawnsToMove.move(move.direction());
-        movedPawn.ifPresent(pawn -> {
+        return movedPawn.map(pawn -> {
             if (move.pawns().contains(pawn)) {
-                findPawnInFront(move, pawn);
-                return;
+                collectFrontPawnsToPush(move, pawn);
+                return new HashSet<Pawn>();
             }
             if (blackPawns.contains(pawn) || whitePawns.contains(pawn)) {
+                // TODO : blackPawns.contains(pawn) si player WHITE
+                if (whitePawns.contains(pawn)) {
+                    boolean isGroupMove = move.pawns().size() > 1;
+                    Optional<Pawn> pawnProjection = pawn.move(move.direction());
+                    boolean nextSquareFree = pawnProjection
+                            .map(next -> !whitePawns.contains(next) && !blackPawns.contains(next))
+                            .orElse(true);
+
+                    if (isGroupMove && nextSquareFree) {
+                        return pawnProjection.stream().collect(Collectors.toSet());
+                    }
+                }
                 throw new IllegalStateException("Cannot move pawn to occupied square at " + pawn);
             }
-        });
+            return new HashSet<Pawn>();
+        }).orElse(new HashSet<>());
         // TODO: eliminaton du pion
         // TODO: ajouter les pions blancs identifies aux pions a deplacer
     }

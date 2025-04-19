@@ -33,7 +33,8 @@ public class PawnFixture {
             new SquarePosition(10, 12, 10),
             new SquarePosition(12, 13, 9),
             new SquarePosition(7, 12, 13),
-            new SquarePosition(9, 13, 12)
+            new SquarePosition(9, 13, 12),
+            new SquarePosition(12, 10, 6)
     );
 
     public static Set<Pawn> whitePawnMidboard() {

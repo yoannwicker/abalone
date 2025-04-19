@@ -320,6 +320,24 @@ class GameTest {
                     .isInstanceOf(IllegalStateException.class);
         }
 
+        @Test
+        void move_two_pawns_and_one_opponent_pawn() {
+            // given
+            Game game = new Game(Player.BLACK, blackPawnMidboard(), whitePawnMidboard());
+            Pawn firstPawn = new Pawn(new SquarePosition(10, 6, 4));
+            Pawn secondPawn = new Pawn(new SquarePosition(11, 8, 5));
+
+            // when
+            Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
+            var movedPawn = game.play(Player.BLACK, move);
+
+            // then
+            Pawn expectedFirstPawn = new Pawn(new SquarePosition(11, 8, 5));
+            Pawn expectedSecondPawn = new Pawn(new SquarePosition(12, 10, 6));
+            Pawn expectedMovedWhitePawn = new Pawn(new SquarePosition(13, 12, 7));
+            assertThat(movedPawn).containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedMovedWhitePawn);
+        }
+
 
         // TODO: deplacer les pions ennemis si seul
         // TODO: deplacer les pions ennemis si pas de pions allie colle derriere

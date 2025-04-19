@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 public record Pawn(SquarePosition squarePosition) {
 
+    // TODO : Ajouter la Couleur du pion (Player)
+
     private static final Set<SquarePosition> BLACK_PAWN_INITIAL_POSITIONS = Set.of(
             new SquarePosition(4, 0, 4),
             new SquarePosition(6, 1, 3),
