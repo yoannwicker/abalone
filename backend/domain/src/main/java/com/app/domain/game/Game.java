@@ -31,6 +31,11 @@ public class Game {
         }
 
         var movedPawns = move.movePawn();
+        movedPawns.forEach(pawn -> {
+            if (blackPawns.contains(pawn) || whitePawns.contains(pawn)) {
+                throw new IllegalStateException("Cannot move pawn to occupied square at " + pawn);
+            }
+        });
 
         if (Player.BLACK.equals(player)) {
             blackPawns.removeAll(move.pawns());
