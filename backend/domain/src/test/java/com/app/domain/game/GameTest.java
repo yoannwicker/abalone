@@ -321,7 +321,7 @@ class GameTest {
         }
 
         @Test
-        void move_two_pawns_and_one_opponent_pawn() {
+        void move_two_black_pawns_and_one_white_pawn() {
             // given
             Game game = new Game(Player.BLACK, blackPawnMidboard(), whitePawnMidboard());
             Pawn firstPawn = new Pawn(Player.BLACK, new SquarePosition(10, 6, 4));
@@ -329,13 +329,38 @@ class GameTest {
 
             // when
             Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
-            var movedPawn = game.play(Player.BLACK, move);
+            var movedPawns = game.play(Player.BLACK, move);
 
             // then
             Pawn expectedFirstPawn = new Pawn(Player.BLACK, new SquarePosition(11, 8, 5));
             Pawn expectedSecondPawn = new Pawn(Player.BLACK, new SquarePosition(12, 10, 6));
-            Pawn expectedMovedWhitePawn = new Pawn(Player.BLACK, new SquarePosition(13, 12, 7));
-            assertThat(movedPawn).containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedMovedWhitePawn);
+            Pawn expectedMovedWhitePawn = new Pawn(Player.WHITE, new SquarePosition(13, 12, 7));
+            assertThat(movedPawns).containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedMovedWhitePawn);
+        }
+
+        @Test
+        void move_two_white_pawns_and_one_black_pawn() {
+            // given
+            Game game = new Game(Player.BLACK, blackPawnMidboard(), whitePawnMidboard());
+
+            Pawn firstBlackPawn = new Pawn(Player.BLACK, new SquarePosition(10, 6, 4));
+            Pawn secondBlackPawn = new Pawn(Player.BLACK, new SquarePosition(11, 8, 5));
+            Move blackMove = new Move(Set.of(firstBlackPawn, secondBlackPawn), Direction.MOVE_FORWARD_Y);
+            game.play(Player.BLACK, blackMove);
+
+            Pawn firstWhitePawn = new Pawn(Player.WHITE, new SquarePosition(11, 11, 8));
+            Pawn secondWhitePawn = new Pawn(Player.WHITE, new SquarePosition(10, 12, 10));
+
+            // when
+            Move move = new Move(Set.of(firstWhitePawn, secondWhitePawn), Direction.MOVE_BACK_Z);
+            var movedPawns = game.play(Player.WHITE, move);
+
+
+            // then
+            Pawn expectedFirstPawn = new Pawn(Player.WHITE, new SquarePosition(11, 11, 8));
+            Pawn expectedSecondPawn = new Pawn(Player.WHITE, new SquarePosition(12, 10, 6));
+            Pawn expectedMovedWhitePawn = new Pawn(Player.BLACK, new SquarePosition(13, 9, 4));
+            assertThat(movedPawns).containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedMovedWhitePawn);
         }
 
 
