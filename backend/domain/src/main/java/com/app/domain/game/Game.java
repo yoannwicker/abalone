@@ -1,6 +1,5 @@
 package com.app.domain.game;
 
-import java.util.Optional;
 import java.util.Set;
 
 public class Game {
@@ -20,35 +19,35 @@ public class Game {
         this.whitePawns = whitePawns;
     }
 
-    public Optional<Pawn> play(Player player, Move move) {
+    public Set<Pawn> play(Player player, Move move) {
 
         if (player != playerTurn) {
             throw new IllegalArgumentException();
         }
 
-        if (Player.BLACK.equals(player) && !blackPawns.contains(move.pawn())
-        || Player.WHITE.equals(player) && !whitePawns.contains(move.pawn())) {
+        if (Player.BLACK.equals(player) && move.pawns().stream().noneMatch(blackPawns::contains)
+        || Player.WHITE.equals(player) && move.pawns().stream().noneMatch(whitePawns::contains)) {
             throw new IllegalArgumentException();
         }
 
-        var movedPawn = move.movePawn();
-        movedPawn.ifPresent(pawn -> {
+        var movedPawns = move.movePawn();
+        movedPawns.forEach(pawn -> {
             if (blackPawns.contains(pawn) || whitePawns.contains(pawn)) {
                 throw new IllegalStateException("Cannot move pawn to occupied square at " + pawn);
             }
         });
 
         if (Player.BLACK.equals(player)) {
-            blackPawns.remove(move.pawn());
-            movedPawn.ifPresent(blackPawns::add);
+            blackPawns.removeAll(move.pawns());
+            blackPawns.addAll(movedPawns);
         }
 
         if (Player.WHITE.equals(player)) {
-            whitePawns.remove(move.pawn());
-            movedPawn.ifPresent(whitePawns::add);
+            whitePawns.removeAll(move.pawns());
+            whitePawns.addAll(movedPawns);
         }
 
         playerTurn = player.nextPlayer();
-        return movedPawn;
+        return movedPawns;
     }
 }

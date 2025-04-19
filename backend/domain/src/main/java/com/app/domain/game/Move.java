@@ -1,10 +1,14 @@
 package com.app.domain.game;
 
-import java.util.Optional;
+import java.util.Set;
 
-public record Move(Pawn pawn, Direction direction) {
+public record Move(Set<Pawn> pawns, Direction direction) {
 
-    public Optional<Pawn> movePawn() {
-        return pawn.move(direction);
+    public Move(Pawn pawn, Direction direction) {
+        this(Set.of(pawn), direction);
+    }
+
+    public Set<Pawn> movePawn() {
+        return pawns.stream().findAny().orElseThrow().move(direction);
     }
 }

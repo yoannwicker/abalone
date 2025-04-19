@@ -1,8 +1,11 @@
 package com.app.domain.game;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptySet;
 
 public record Pawn(SquarePosition squarePosition) {
 
@@ -58,11 +61,11 @@ public record Pawn(SquarePosition squarePosition) {
         }
     }
 
-    public Optional<Pawn> move(Direction direction) {
+    public Set<Pawn> move(Direction direction) {
         SquarePosition newPosition = squarePosition.update(direction);
         if (newPosition.isEliminatory()) {
-            return Optional.empty();
+            return emptySet();
         }
-        return Optional.of(new Pawn(newPosition));
+        return Set.of(new Pawn(newPosition));
     }
 }

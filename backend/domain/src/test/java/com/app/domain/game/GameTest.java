@@ -3,6 +3,8 @@ package com.app.domain.game;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static com.app.domain.game.PawnFixture.blackPawnMidboard;
 import static com.app.domain.game.PawnFixture.whitePawnMidboard;
 import static org.assertj.core.api.Assertions.*;
@@ -186,14 +188,14 @@ class GameTest {
             Game game = new Game();
 
             SquarePosition initialBlackPawnPosition = new SquarePosition(10, 6, 4);
-            var movedBlackPawn = game.play(Player.BLACK, new Move(new Pawn(initialBlackPawnPosition), Direction.MOVE_FORWARD_X));
+            var movedBlackPawns = game.play(Player.BLACK, new Move(new Pawn(initialBlackPawnPosition), Direction.MOVE_FORWARD_X));
             SquarePosition initialWhitePawnPosition = new SquarePosition(6, 10, 12);
-            var movedWhitePawn = game.play(Player.WHITE, new Move(new Pawn(initialWhitePawnPosition), Direction.MOVE_BACK_X));
+            var movedWhitePawns = game.play(Player.WHITE, new Move(new Pawn(initialWhitePawnPosition), Direction.MOVE_BACK_X));
 
             // when then
             assertThatCode(() -> {
-                game.play(Player.BLACK, new Move(movedBlackPawn.orElseThrow(), Direction.MOVE_FORWARD_X));
-                game.play(Player.WHITE, new Move(movedWhitePawn.orElseThrow(), Direction.MOVE_BACK_X));
+                game.play(Player.BLACK, new Move(movedBlackPawns, Direction.MOVE_FORWARD_X));
+                game.play(Player.WHITE, new Move(movedWhitePawns, Direction.MOVE_BACK_X));
             }).doesNotThrowAnyException();
         }
 
@@ -268,6 +270,25 @@ class GameTest {
 
     @Nested
     class MoveTwoPawnsOnALine {
+
+        @Test
+        void move_two_pawns() {
+            // given
+            Game game = new Game();
+            Pawn firstPawn = new Pawn(new SquarePosition(5, 2, 5));
+            Pawn secondPawn = new Pawn(new SquarePosition(6, 4, 6));
+
+            // when
+            Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
+            var movedPawn = game.play(Player.BLACK, move);
+
+            // then
+            var expectedPosition = new SquarePosition(7, 6, 7);
+            var expectedPawn = new Pawn(expectedPosition);
+            assertThat(movedPawn).contains(expectedPawn);
+        }
+
+
         // TODO: deplacer les pions ennemis si seul
         // TODO: deplacer les pions ennemis si pas de pions allie colle derriere
     }
