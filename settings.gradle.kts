@@ -1,4 +1,4 @@
-rootProject.name = "pet-care"
+rootProject.name = "abalone"
 
 include("backend:application")
 findProject(":backend:application")?.name = "application"
