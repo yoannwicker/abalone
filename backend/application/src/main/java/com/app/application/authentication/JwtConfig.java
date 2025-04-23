@@ -4,8 +4,9 @@ import com.app.domain.auth.repository.TokenParameterProvider;
 import com.app.domain.auth.repository.TokenRepository;
 import com.app.domain.auth.usecase.GenerateToken;
 import com.app.domain.auth.usecase.ManageToken;
-import com.app.domain.common.repository.CurrentDateProvider;
 import com.app.infrastructure.jjwt.TokenJjwtRepository;
+import java.util.Date;
+import java.util.function.Supplier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +46,8 @@ public class JwtConfig {
   }
 
   @Bean
-  public ManageToken manageToken(TokenRepository tokenRepository,
-      CurrentDateProvider currentDateProvider) {
+  public ManageToken manageToken(
+      TokenRepository tokenRepository, Supplier<Date> currentDateProvider) {
     return new ManageToken(tokenRepository, currentDateProvider);
   }
 }

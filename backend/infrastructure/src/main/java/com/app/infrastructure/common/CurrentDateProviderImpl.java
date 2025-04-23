@@ -1,14 +1,14 @@
 package com.app.infrastructure.common;
 
-import com.app.domain.common.repository.CurrentDateProvider;
 import java.util.Date;
+import java.util.function.Supplier;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CurrentDateProviderImpl implements CurrentDateProvider {
+public class CurrentDateProviderImpl implements Supplier<Date> {
 
   @Override
-  public Date getCurrentDate() {
+  public Date get() {
     return new Date();
   }
 }

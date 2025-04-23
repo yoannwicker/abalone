@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import com.app.domain.auth.entity.AuthenticationInformation;
 import com.app.domain.auth.repository.TokenRepository;
-import com.app.domain.common.repository.CurrentDateProvider;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,30 +26,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ManageTokenTest {
 
-  @Mock
-  private TokenRepository tokenRepository;
-
-  private static final Instant BEFORE_CURRENT = LocalDateTime.of(2024, 6, 20, 10, 0, 0)
-      .atZone(ZoneId.systemDefault())
-      .toInstant();
-  private static final Instant CURRENT = LocalDateTime.of(2024, 7, 20, 10, 0, 0)
-      .atZone(ZoneId.systemDefault())
-      .toInstant();
-  private static final Instant AFTER_CURRENT = LocalDateTime.of(2024, 8, 20, 10, 0, 0)
-      .atZone(ZoneId.systemDefault())
-      .toInstant();
-
+  private static final Instant BEFORE_CURRENT =
+      LocalDateTime.of(2024, 6, 20, 10, 0, 0).atZone(ZoneId.systemDefault()).toInstant();
+  private static final Instant CURRENT =
+      LocalDateTime.of(2024, 7, 20, 10, 0, 0).atZone(ZoneId.systemDefault()).toInstant();
+  private static final Instant AFTER_CURRENT =
+      LocalDateTime.of(2024, 8, 20, 10, 0, 0).atZone(ZoneId.systemDefault()).toInstant();
+  @Mock private TokenRepository tokenRepository;
   private ManageToken manageToken;
-
-  @BeforeEach
-  void setUp() {
-    manageToken = new ManageToken(tokenRepository, new CurrentDateProvider() {
-      @Override
-      public Date getCurrentDate() {
-        return Date.from(CURRENT);
-      }
-    });
-  }
 
   static Stream<Arguments> tokenValidationArguments() {
     return Stream.of(
@@ -59,8 +42,12 @@ class ManageTokenTest {
         // Test case: Token is expired
         Arguments.of(Date.from(BEFORE_CURRENT), "username", false),
         // Test case: Username does not match
-        Arguments.of(Date.from(AFTER_CURRENT), "an-other-username", false)
-    );
+        Arguments.of(Date.from(AFTER_CURRENT), "an-other-username", false));
+  }
+
+  @BeforeEach
+  void setUp() {
+    manageToken = new ManageToken(tokenRepository, () -> Date.from(CURRENT));
   }
 
   @ParameterizedTest
@@ -69,14 +56,15 @@ class ManageTokenTest {
     // given
     String token = "token";
     String username = "username";
-    when(tokenRepository.extractAuthenticationInformations(eq(token),
-        argThat(claimsResolverMatcher(username, expirationDate))))
-        .thenAnswer(invocation -> {
-          Function<AuthenticationInformation, ?> claimsResolver = invocation.getArgument(1);
-          AuthenticationInformation authInfo = new AuthenticationInformation(username,
-              expirationDate);
-          return claimsResolver.apply(authInfo);
-        });
+    when(tokenRepository.extractAuthenticationInformations(
+            eq(token), argThat(claimsResolverMatcher(username, expirationDate))))
+        .thenAnswer(
+            invocation -> {
+              Function<AuthenticationInformation, ?> claimsResolver = invocation.getArgument(1);
+              AuthenticationInformation authInfo =
+                  new AuthenticationInformation(username, expirationDate);
+              return claimsResolver.apply(authInfo);
+            });
 
     // when then
     assertThat(manageToken.validate(token, inputUsername)).isEqualTo(expectedResult);
@@ -88,13 +76,14 @@ class ManageTokenTest {
     String token = "token";
     String username = "username";
 
-    when(tokenRepository.extractAuthenticationInformations(eq(token),
-        argThat(claimsResolverMatcher(username))))
-        .thenAnswer(invocation -> {
-          Function<AuthenticationInformation, ?> claimsResolver = invocation.getArgument(1);
-          AuthenticationInformation authInfo = new AuthenticationInformation(username, null);
-          return claimsResolver.apply(authInfo);
-        });
+    when(tokenRepository.extractAuthenticationInformations(
+            eq(token), argThat(claimsResolverMatcher(username))))
+        .thenAnswer(
+            invocation -> {
+              Function<AuthenticationInformation, ?> claimsResolver = invocation.getArgument(1);
+              AuthenticationInformation authInfo = new AuthenticationInformation(username, null);
+              return claimsResolver.apply(authInfo);
+            });
 
     // when
     String result = manageToken.extractUsername(token);
@@ -113,9 +102,8 @@ class ManageTokenTest {
       String username, Date expirationDate) {
     return argument -> {
       AuthenticationInformation authInfo = new AuthenticationInformation(username, expirationDate);
-      return argument.apply(authInfo).equals(username) || argument.apply(authInfo)
-          .equals(expirationDate);
+      return argument.apply(authInfo).equals(username)
+          || argument.apply(authInfo).equals(expirationDate);
     };
   }
-
 }
