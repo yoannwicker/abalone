@@ -16,6 +16,11 @@ See contributing documentation: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 Run the app in dev mode with Intellij Idea (backend and frontend)
 
+```shell
+npm start
+./gradlew :backend:application:bootRun
+```
+
 ## Compile and run the fat jar
 
 ```shell

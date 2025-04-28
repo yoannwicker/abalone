@@ -20,6 +20,15 @@ tasks {
         archiveBaseName.set("abalone")
     }
 
+    bootRun {
+        classpath(
+            files(
+                "./build/classes/java/main",
+                "./build/resources/main",
+            )
+        )
+    }
+
     jar {
         enabled = false
         manifest {
