@@ -21,6 +21,10 @@ npm start
 ./gradlew :backend:application:bootRun
 ```
 
+```shell
+./gradlew :frontend:npmStart :backend:application:bootRun 
+```
+
 ## Compile and run the fat jar
 
 ```shell

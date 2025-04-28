@@ -51,10 +51,20 @@ sonarqube {
 */
 
 plugins {
+  id("com.github.node-gradle.node") version "7.0.2"
   base
 }
 
-tasks.register<Exec>("npmStart") {
+node {
+  version.set("20.12.0") // adapte à la version de ton projet
+  npmVersion.set("10.5.0")
+  download.set(true) // télécharge Node automatiquement
+  workDir.set(file("${project.buildDir}/nodejs"))
+  npmWorkDir.set(file("${project.buildDir}/npm"))
+}
+
+tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmStart") {
   workingDir = file("src")
-  commandLine("npm", "start")
+  dependsOn(tasks.named("npmInstall"))
+  args.set(listOf("run", "start"))
 }
