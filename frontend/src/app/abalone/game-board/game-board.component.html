@@ -1,0 +1,51 @@
+<div (contextmenu)="onRightClick($event)" class="board">
+  <div *ngFor="let row of board" class="row">
+    <div
+      (click)="selectCell(cell)"
+      *ngFor="let cell of row"
+      [class.has-black-pawn]="cell.hasBlackPawn()"
+      [class.has-white-pawn]="cell.hasWhitePawn()"
+      [class.selected]="cell.selected"
+      class="cell"
+    >
+      <ng-container *ngIf="cell.selected">
+        <div (mouseenter)="onHover('E')"
+             (mouseleave)="onHover(null)"
+             class="hover-zone hover-E">
+          <div (click)="move('E')" [class.visible]="hoveredDirection === 'E'"
+               class="arrow arrow-E"></div>
+        </div>
+        <div (mouseenter)="onHover('W')"
+             (mouseleave)="onHover(null)"
+             class="hover-zone hover-W">
+          <div (click)="move('W')" [class.visible]="hoveredDirection === 'W'"
+               class="arrow arrow-W"></div>
+        </div>
+        <div (mouseenter)="onHover('NE')"
+             (mouseleave)="onHover(null)"
+             class="hover-zone hover-NE">
+          <div (click)="move('NE')" [class.visible]="hoveredDirection === 'NE'"
+               class="arrow arrow-NE"></div>
+        </div>
+        <div (mouseenter)="onHover('NW')"
+             (mouseleave)="onHover(null)"
+             class="hover-zone hover-NW">
+          <div (click)="move('NW')" [class.visible]="hoveredDirection === 'NW'"
+               class="arrow arrow-NW"></div>
+        </div>
+        <div (mouseenter)="onHover('SE')"
+             (mouseleave)="onHover(null)"
+             class="hover-zone hover-SE">
+          <div (click)="move('SE')" [class.visible]="hoveredDirection === 'SE'"
+               class="arrow arrow-SE"></div>
+        </div>
+        <div (mouseenter)="onHover('SW')"
+             (mouseleave)="onHover(null)"
+             class="hover-zone hover-SW">
+          <div (click)="move('SW')" [class.visible]="hoveredDirection === 'SW'"
+               class="arrow arrow-SW"></div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

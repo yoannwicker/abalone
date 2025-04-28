@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Game {
+
   final PlayerPawns blackPlayerPawns;
   final PlayerPawns whitePlayerPawns;
   private Player playerTurn;
@@ -24,6 +25,24 @@ public class Game {
     this.whitePlayerPawns = new PlayerPawns(Player.WHITE, whitePawns);
     this.gameStatus =
         new GameStatus(blackPlayerPawns.lostPawnsCount(), whitePlayerPawns.lostPawnsCount());
+  }
+
+  public Set<String> getBlackPawnPositions() {
+    return blackPlayerPawns.pawns().stream()
+        .map(Pawn::squarePosition)
+        .map(SquarePosition::name)
+        .collect(Collectors.toSet());
+  }
+
+  public Set<String> getWhitePawnPositions() {
+    return whitePlayerPawns.pawns().stream()
+        .map(Pawn::squarePosition)
+        .map(SquarePosition::name)
+        .collect(Collectors.toSet());
+  }
+
+  public Player getPlayerTurn() {
+    return playerTurn;
   }
 
   public PlayResult play(Player player, Move move) {

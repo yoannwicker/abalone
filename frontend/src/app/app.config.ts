@@ -7,9 +7,9 @@ import {AuthGuard} from "./auth.guard";
 import {JwtModule} from "@auth0/angular-jwt";
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {AuthService} from "./auth/auth.service";
-import {SearchComponent} from "./search/search.component";
 import {JwtInterceptor} from "./jwt.interceptor";
 import {environment} from "../environments/environment";
+import {GameBoardComponent} from "./abalone/game-board/game-board.component";
 
 export function tokenGetter() {
   // @ts-ignore
@@ -20,23 +20,24 @@ export function tokenGetter() {
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(
-        RouterModule,
-        JwtModule.forRoot({
-          config: {
-            tokenGetter: tokenGetter,
-            allowedDomains: [environment.apiDomain],
-            disallowedRoutes: [
-              'http://${environment.apiDomain}/api/auth/login',
-              'http://${environment.apiDomain}/api/auth/register'
-            ]
-          }
-        })
+      RouterModule,
+      JwtModule.forRoot({
+        config: {
+          tokenGetter: tokenGetter,
+          allowedDomains: [environment.apiDomain],
+          disallowedRoutes: [
+            'http://${environment.apiDomain}/api/auth/login',
+            'http://${environment.apiDomain}/api/auth/register',
+            'http://${environment.apiDomain}/api/auth/new',
+            'http://${environment.apiDomain}/api/auth/move'
+          ]
+        }
+      })
     ),
     provideRouter([
       {path: 'login', component: LoginComponent},
       {path: 'register', component: RegisterComponent},
-      {path: '', redirectTo: '/search', pathMatch: 'full'},
-      {path: 'search', component: SearchComponent, canActivate: [AuthGuard]}
+      {path: '', component: GameBoardComponent}
     ]),
     provideHttpClient(withInterceptorsFromDi()),
     AuthService,

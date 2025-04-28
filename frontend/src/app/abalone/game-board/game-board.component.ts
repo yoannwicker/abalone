@@ -1,0 +1,108 @@
+import {Component, OnInit} from '@angular/core';
+import {NgFor, NgIf} from '@angular/common';
+import {Game} from "./model/game";
+import {GameService} from "../services/game.service";
+import {Square} from "./model/square";
+import {Player} from "./model/player";
+import {Pawn} from "./model/pawn";
+
+@Component({
+  selector: 'app-game-board',
+  standalone: true,
+  imports: [NgFor, NgIf],
+  templateUrl: './game-board.component.html',
+  styleUrl: './game-board.component.css'
+})
+export class GameBoardComponent implements OnInit {
+  board: Square[][] = [];
+  selectedPositions: string[] = [];
+  playerTurn: Player | undefined;
+  hoveredDirection: string | null = null;
+  private maxSelectedPawns: number = 3;
+
+  constructor(private gameService: GameService) {
+  }
+
+  ngOnInit(): void {
+    this.gameService.getInitialPawnPositions().subscribe((game: Game) => {
+      const newGame = new Game(game.playerTurn, game.blackPawnPositions, game.whitePawnPositions);
+      this.board = newGame.getSquareByRows();
+      this.playerTurn = newGame.playerTurn;
+    });
+  }
+
+  selectCell(cell: Square) {
+    if (this.selectedPositions.length >= this.maxSelectedPawns && !cell.selected
+      || !cell.hasPawnBelongingPlayer(this.playerTurn)) {
+      return;
+    }
+    cell.selected = !cell.selected;
+    if (cell.selected) {
+      this.selectedPositions.push(cell.position);
+    } else {
+      this.selectedPositions = this.selectedPositions.filter(position => position !== cell.position);
+    }
+  }
+
+  onRightClick(event: MouseEvent) {
+    event.preventDefault();
+    if (this.selectedPositions) {
+      this.cancelSelection();
+    }
+  }
+
+  move(direction: string) {
+    const pawnsToMove = this.getSquares(this.selectedPositions)
+    .map(square => square.pawn)
+    .filter(pawn => pawn !== null) as Pawn[];
+    this.gameService.movePawn(this.playerTurn, pawnsToMove, direction).subscribe((movedPawns: Pawn[]) => {
+      this.getPawnSquares(pawnsToMove).forEach(
+        square => {
+          square.pawn = null;
+        }
+      )
+      movedPawns.forEach(
+        pawn => {
+          const square = this.getSquare(pawn.position);
+          if (square) {
+            square.pawn = pawn;
+          }
+        }
+      )
+      this.cancelSelection();
+      this.nextTurn();
+    });
+  }
+
+  getSquare(position: string): Square | undefined {
+    return this.board
+    .find(row => row.some(cell => cell.position === position))
+    ?.find(cell => cell.position === position);
+  }
+
+  getPawnSquares(pawns: Pawn[]): Square[] {
+    const positions = pawns.map(pawn => pawn.position);
+    return this.getSquares(positions);
+  }
+
+  getSquares(positions: string[]): Square[] {
+    return this.board
+    .flatMap(row => row)
+    .filter(cell => positions.includes(cell.position));
+  }
+
+  onHover(direction: string | null) {
+    this.hoveredDirection = direction;
+  }
+
+  private cancelSelection() {
+    this.getSquares(this.selectedPositions).forEach(square => {
+      square.selected = false;
+    });
+    this.selectedPositions = [];
+  }
+
+  private nextTurn() {
+    this.playerTurn = this.playerTurn === Player.BLACK ? Player.WHITE : Player.BLACK;
+  }
+}
