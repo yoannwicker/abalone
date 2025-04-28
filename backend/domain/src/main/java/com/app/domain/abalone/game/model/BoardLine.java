@@ -29,11 +29,11 @@ public enum BoardLine {
     return Optional.of(values()[index - 1]);
   }
 
-  public boolean inAboveTheBoard() {
+  public boolean inBottomTheBoard() {
     return this.ordinal() < 4;
   }
 
-  public boolean inBottomTheBoard() {
+  public boolean inAboveTheBoard() {
     return this.ordinal() > 4;
   }
 }

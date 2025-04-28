@@ -1,8 +1,8 @@
 package com.app.domain.abalone.game.model;
 
-import static com.app.domain.abalone.game.model.Direction.MOVE_BACK_Z;
 import static com.app.domain.abalone.game.model.Direction.MOVE_FORWARD_X;
 import static com.app.domain.abalone.game.model.Direction.MOVE_FORWARD_Y;
+import static com.app.domain.abalone.game.model.Direction.MOVE_FORWARD_Z;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -70,7 +70,7 @@ public final class Move {
   }
 
   private static List<Pawn> getSortedPawnsToMove(Set<Pawn> pawnsToMove, Direction direction) {
-    if (Set.of(MOVE_FORWARD_X, MOVE_FORWARD_Y, MOVE_BACK_Z).contains(direction)) {
+    if (Set.of(MOVE_FORWARD_X, MOVE_FORWARD_Y, MOVE_FORWARD_Z).contains(direction)) {
       return pawnsToMove.stream().sorted(Comparator.comparing(Pawn::squarePosition)).toList();
     }
     return pawnsToMove.stream()

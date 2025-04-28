@@ -73,10 +73,10 @@ class GameTest {
               whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
 
       Pawn blackPawn = new Pawn(BLACK, B3);
-      Move anyBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
+      Move validBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
 
       // when then
-      assertThatCode(() -> game.play(BLACK, anyBlackMove)).doesNotThrowAnyException();
+      assertThatCode(() -> game.play(BLACK, validBlackMove)).doesNotThrowAnyException();
     }
 
     @Test
@@ -89,10 +89,10 @@ class GameTest {
               whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
 
       Pawn blackPawn = new Pawn(BLACK, B3);
-      Move anyBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
+      Move validBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
 
       // when then
-      assertThatThrownBy(() -> game.play(BLACK, anyBlackMove))
+      assertThatThrownBy(() -> game.play(BLACK, validBlackMove))
           .isInstanceOf(IllegalStateException.class);
     }
 
@@ -106,10 +106,10 @@ class GameTest {
               whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
 
       Pawn whitePawn = new Pawn(WHITE, H3);
-      Move anyWhiteMove = new Move(whitePawn, Direction.MOVE_BACK_Y);
+      Move validWhiteMove = new Move(whitePawn, Direction.MOVE_BACK_Y);
 
       // when then
-      assertThatThrownBy(() -> game.play(WHITE, anyWhiteMove))
+      assertThatThrownBy(() -> game.play(WHITE, validWhiteMove))
           .isInstanceOf(IllegalStateException.class);
     }
 
@@ -124,10 +124,10 @@ class GameTest {
       game.drawMatch();
 
       Pawn blackPawn = new Pawn(BLACK, B3);
-      Move anyBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
+      Move validBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
 
       // when then
-      assertThatThrownBy(() -> game.play(BLACK, anyBlackMove))
+      assertThatThrownBy(() -> game.play(BLACK, validBlackMove))
           .isInstanceOf(IllegalStateException.class);
     }
   }
@@ -714,7 +714,7 @@ class GameTest {
   class MoveThreePawnsOnALine {
 
     @Test
-    void move_three_pawns() {
+    void move_three_black_pawns() {
       // given
       Game game = new Game();
       Pawn firstPawn = new Pawn(BLACK, A1);
@@ -733,6 +733,60 @@ class GameTest {
       assertThat(playResult.movedPawns())
           .containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedThirdPawn);
       assertThatNoPawnLost(playResult);
+    }
+
+    @Test
+    void move_three_white_pawns() {
+      // given
+      Game game = new Game();
+
+      game.play(BLACK, new Move(Set.of(new Pawn(BLACK, C3)), Direction.MOVE_FORWARD_Y));
+
+      Pawn firstPawn = new Pawn(WHITE, I5);
+      Pawn secondPawn = new Pawn(WHITE, H5);
+      Pawn thirdPawn = new Pawn(WHITE, G5);
+
+      // when
+      Set<Pawn> pawnsToMove = Set.of(firstPawn, secondPawn, thirdPawn);
+      Move move = new Move(pawnsToMove, Direction.MOVE_BACK_Y);
+      var playResult = game.play(WHITE, move);
+
+      // then
+      var expectedFirstPawn = new Pawn(WHITE, F5);
+      var expectedSecondPawn = new Pawn(WHITE, G5);
+      var expectedThirdPawn = new Pawn(WHITE, H5);
+      assertThat(playResult.movedPawns())
+          .containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedThirdPawn);
+      assertThatNoPawnLost(playResult);
+    }
+
+    @Test
+    void move_three_white_pawns_in_the_middle() {
+      // given
+      Game game =
+          new Game(
+              WHITE,
+              blackPawns(C3, C4, C5, D3, D4, D5, E4, E5, C2),
+              whitePawns(H3, H4, G2, G3, G4, G5, G6, F3, F4, F5, E6, D6));
+
+      Pawn firstPawn = new Pawn(WHITE, F5);
+      Pawn secondPawn = new Pawn(WHITE, E6);
+      Pawn thirdPawn = new Pawn(WHITE, D6);
+
+      // when
+      Set<Pawn> pawnsToMove = Set.of(firstPawn, secondPawn, thirdPawn);
+      Move move = new Move(pawnsToMove, Direction.MOVE_BACK_Z);
+      var playResult = game.play(WHITE, move);
+
+      // then
+      var expectedFirstPawn = new Pawn(WHITE, E6);
+      var expectedSecondPawn = new Pawn(WHITE, D6);
+      var expectedThirdPawn = new Pawn(WHITE, C6);
+      assertThat(playResult.movedPawns())
+          .containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedThirdPawn);
+      assertThat(playResult)
+          .extracting(PlayResult::blackPawnsLost, PlayResult::whitePawnsLost)
+          .containsExactly(5, 2);
     }
 
     @Test
@@ -987,6 +1041,18 @@ class GameTest {
       assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
+    }
+
+    @Test
+    void should_not_be_able_to_move_two_black_pawns_to_side_and_one_black_pawn() {
+      // given
+      Game game = new Game();
+      Pawn firstPawn = new Pawn(BLACK, A1);
+      Pawn secondPawn = new Pawn(BLACK, B2);
+      Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Z);
+
+      // when then
+      assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
     }
   }
 

@@ -1,5 +1,7 @@
 package com.app.domain.abalone.game.model;
 
+import static java.util.Collections.emptySet;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,19 +59,17 @@ public class Game {
       throw new IllegalArgumentException("Illegal move " + move);
     }
 
-    if (move.isSideways()) {
-      if (move.movePawns().stream()
-          .anyMatch(
-              pawnProjection -> {
-                var opponentPawnProjection = pawnProjection.toOpponentPawn();
-                return blackPlayerPawns.contains(opponentPawnProjection)
-                    || whitePlayerPawns.contains(opponentPawnProjection);
-              })) {
-        throw new IllegalStateException("Cannot move sideways to occupied square");
-      }
+    if (move.isSideways()
+        && move.movePawns().stream()
+            .anyMatch(
+                pawnProjection ->
+                    blackPlayerPawns.hasPawnAtSamePosition(pawnProjection)
+                        || whitePlayerPawns.hasPawnAtSamePosition(pawnProjection))) {
+      throw new IllegalStateException("Cannot move sideways to occupied square");
     }
 
-    var opponentPawnsToPush = collectOpponentPawnsToPush(move);
+    Set<Pawn> opponentPawnsToPush =
+        move.isSideways() ? emptySet() : collectOpponentPawnsToPush(move);
 
     var movedPawns = move.movePawns();
     var movedOpponentPawns =
