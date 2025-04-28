@@ -10,6 +10,6 @@ RUN npm run build -- --configuration production
 
 FROM nginx:alpine
 
-COPY --from=builder /app/dist/pet-care /usr/share/nginx/html/
+COPY --from=builder /app/dist/abalone /usr/share/nginx/html/
 
 COPY /default.conf /etc/nginx/conf.d/default.conf

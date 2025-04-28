@@ -17,7 +17,7 @@ import {RouteService} from "../route.service";
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent {
-  applicationName: string = "Pet care";
+  applicationName: string = "Abalone";
   appLogo: string = "./assets/logo.png";
 
   isMobileMenuOpen = false;

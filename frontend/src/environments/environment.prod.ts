@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiDomain: 'pet-care-backend:8080'
+  apiDomain: 'abalone-backend:8080'
 };

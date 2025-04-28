@@ -5,9 +5,9 @@ LABEL maintainer="Yoann Wicker <yoann.wicker@gmail.com>"
 RUN mkdir /app
 WORKDIR /app
 
-COPY build/libs/pet-care.jar pet-care.jar
+COPY build/libs/abalone.jar abalone.jar
 
-CMD ["/bin/sh", "-c", "java -Xms100M -Xmx250M -jar pet-care.jar --spring.profiles.active=qa"]
+CMD ["/bin/sh", "-c", "java -Xms100M -Xmx250M -jar abalone.jar --spring.profiles.active=qa"]
 
 EXPOSE 8080
 
