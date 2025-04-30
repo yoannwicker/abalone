@@ -66,3 +66,14 @@
     </div>
   </div>
 </div>
+<div *ngIf="winner" class="winner-popup">
+  <div class="popup-content">
+    <p>{{ winner }} a gagné par mat contre {{ otherPlayer(winner) }}</p>
+    <div class="player-icons">
+      <div class="player-icon">⚫</div>
+      <div class="vs-text">vs</div>
+      <div class="player-icon">⚪</div>
+    </div>
+    <button (click)="restartGame()">Rejouer</button>
+  </div>
+</div>

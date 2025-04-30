@@ -22,17 +22,14 @@ export class GameBoardComponent implements OnInit {
   capturedBlack: boolean[] = [];
   capturedWhite: boolean[] = [];
   lastMovedPositions: string[] = [];
+  winner: Player | null = null;
   private maxSelectedPawns: number = 3;
 
   constructor(private gameService: GameService) {
   }
 
   ngOnInit(): void {
-    this.gameService.getInitialPawnPositions().subscribe((game: Game) => {
-      const newGame = new Game(game.playerTurn, game.blackPawnPositions, game.whitePawnPositions);
-      this.board = newGame.getSquareByRows();
-      this.playerTurn = newGame.playerTurn;
-    });
+    this.initBoard();
   }
 
   selectCell(cell: Square) {
@@ -76,6 +73,7 @@ export class GameBoardComponent implements OnInit {
       this.lastMovedPositions = pawnsToMove
       .map(pawn => pawn.position)
       .concat(movedResult.pawns.filter(pawn => pawn.playerOwner === this.playerTurn).map(pawn => pawn.position));
+      this.winner = movedResult.winner;
       this.updateCapturedDisplay(movedResult.blackPawnsLost, movedResult.whitePawnsLost);
       this.cancelSelection();
       this.nextTurn();
@@ -108,6 +106,16 @@ export class GameBoardComponent implements OnInit {
     this.capturedWhite = Array(6).fill(false).map((_, i) => i < whiteLost);
   }
 
+  restartGame() {
+    this.winner = null;
+    this.lastMovedPositions = [];
+    this.initBoard();
+  }
+
+  protected otherPlayer(player: Player | undefined) {
+    return player === Player.BLACK ? Player.WHITE : Player.BLACK;
+  }
+
   private cancelSelection() {
     this.getSquares(this.selectedPositions).forEach(square => {
       square.selected = false;
@@ -116,6 +124,14 @@ export class GameBoardComponent implements OnInit {
   }
 
   private nextTurn() {
-    this.playerTurn = this.playerTurn === Player.BLACK ? Player.WHITE : Player.BLACK;
+    this.playerTurn = this.otherPlayer(this.playerTurn);
+  }
+
+  private initBoard() {
+    this.gameService.getInitialPawnPositions().subscribe((game: Game) => {
+      const newGame = new Game(game.playerTurn, game.blackPawnPositions, game.whitePawnPositions);
+      this.board = newGame.getSquareByRows();
+      this.playerTurn = newGame.playerTurn;
+    });
   }
 }
