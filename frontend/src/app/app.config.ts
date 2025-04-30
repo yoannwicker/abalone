@@ -10,6 +10,7 @@ import {AuthService} from "./auth/auth.service";
 import {JwtInterceptor} from "./jwt.interceptor";
 import {environment} from "../environments/environment";
 import {GameBoardComponent} from "./abalone/game-board/game-board.component";
+import {provideAnimations} from "@angular/platform-browser/animations";
 
 export function tokenGetter() {
   // @ts-ignore
@@ -34,6 +35,7 @@ export const appConfig: ApplicationConfig = {
         }
       })
     ),
+    provideAnimations(),
     provideRouter([
       {path: 'login', component: LoginComponent},
       {path: 'register', component: RegisterComponent},

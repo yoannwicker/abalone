@@ -25,13 +25,18 @@ public class GameController {
     return ResponseEntity.ok(GameDto.fromGame(game));
   }
 
-  // TODO: remonter une internal server error et pas une 403
   @PostMapping(value = "move", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PlayResultDto> move(@RequestBody MoveDto move) {
-    if (game == null) {
+    try {
+      if (game == null) {
+        return ResponseEntity.badRequest().build();
+      }
+      PlayResult playResult = game.play(move.player(), move.toDomain());
+      return ResponseEntity.ok(PlayResultDto.fromDomain(playResult));
+    } catch (IllegalStateException | IllegalArgumentException e) {
       return ResponseEntity.badRequest().build();
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
     }
-    PlayResult playResult = game.play(move.player(), move.toDomain());
-    return ResponseEntity.ok(PlayResultDto.fromDomain(playResult));
   }
 }

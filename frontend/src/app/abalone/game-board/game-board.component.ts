@@ -1,16 +1,18 @@
 import {Component, OnInit} from '@angular/core';
-import {NgFor, NgIf} from '@angular/common';
+import {CommonModule, NgFor, NgIf} from '@angular/common';
 import {Game} from "./model/game";
 import {GameService} from "../services/game.service";
 import {Square} from "./model/square";
 import {Player} from "./model/player";
 import {Pawn} from "./model/pawn";
 import {MoveResult} from "./model/move-result";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-game-board',
   standalone: true,
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf,
+    CommonModule],
   templateUrl: './game-board.component.html',
   styleUrl: './game-board.component.css'
 })
@@ -25,7 +27,7 @@ export class GameBoardComponent implements OnInit {
   winner: Player | null = null;
   private maxSelectedPawns: number = 3;
 
-  constructor(private gameService: GameService) {
+  constructor(private gameService: GameService, private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -56,27 +58,51 @@ export class GameBoardComponent implements OnInit {
     const pawnsToMove = this.getSquares(this.selectedPositions)
     .map(square => square.pawn)
     .filter(pawn => pawn !== null) as Pawn[];
-    this.gameService.movePawn(this.playerTurn, pawnsToMove, direction).subscribe((movedResult: MoveResult) => {
-      this.getPawnSquares(pawnsToMove).forEach(
-        square => {
-          square.pawn = null;
-        }
-      )
-      movedResult.pawns.forEach(
-        pawn => {
-          const square = this.getSquare(pawn.position);
-          if (square) {
-            square.pawn = pawn;
+    this.gameService.movePawn(this.playerTurn, pawnsToMove, direction).subscribe({
+      next: (movedResult: MoveResult) => {
+        this.getPawnSquares(pawnsToMove).forEach(
+          square => {
+            square.pawn = null;
           }
+        );
+        movedResult.pawns.forEach(
+          pawn => {
+            const square = this.getSquare(pawn.position);
+            if (square) {
+              square.pawn = pawn;
+            }
+          }
+        );
+        this.lastMovedPositions = pawnsToMove
+        .map(pawn => pawn.position)
+        .concat(movedResult.pawns.filter(pawn => pawn.playerOwner === this.playerTurn).map(pawn => pawn.position));
+        this.winner = movedResult.winner;
+        this.updateCapturedDisplay(movedResult.blackPawnsLost, movedResult.whitePawnsLost);
+        this.cancelSelection();
+        this.nextTurn();
+      },
+      error: (err) => {
+        console.log("Error code: ", err?.status);
+        if (err?.status === 400) {
+          this.snackBar.open('Vous ne pouvez pas jouer ce coup', 'Fermer', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        } else if (err?.status === 403) {
+          this.snackBar.open('Vous devez être connecté pour jouer', 'Fermer', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
+        } else {
+          this.snackBar.open('Une erreur est survenue technique est survenue', 'Fermer', {
+            duration: 3000,
+            horizontalPosition: 'right',
+            verticalPosition: 'top'
+          });
         }
-      )
-      this.lastMovedPositions = pawnsToMove
-      .map(pawn => pawn.position)
-      .concat(movedResult.pawns.filter(pawn => pawn.playerOwner === this.playerTurn).map(pawn => pawn.position));
-      this.winner = movedResult.winner;
-      this.updateCapturedDisplay(movedResult.blackPawnsLost, movedResult.whitePawnsLost);
-      this.cancelSelection();
-      this.nextTurn();
+      }
     });
   }
 
