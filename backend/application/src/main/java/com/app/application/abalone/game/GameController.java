@@ -2,11 +2,9 @@ package com.app.application.abalone.game;
 
 import com.app.application.abalone.game.dto.GameDto;
 import com.app.application.abalone.game.dto.MoveDto;
-import com.app.application.abalone.game.dto.PawnDto;
+import com.app.application.abalone.game.dto.PlayResultDto;
 import com.app.domain.abalone.game.model.Game;
 import com.app.domain.abalone.game.model.PlayResult;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +27,11 @@ public class GameController {
 
   // TODO: remonter une internal server error et pas une 403
   @PostMapping(value = "move", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Set<PawnDto>> move(@RequestBody MoveDto move) {
+  public ResponseEntity<PlayResultDto> move(@RequestBody MoveDto move) {
     if (game == null) {
       return ResponseEntity.badRequest().build();
     }
     PlayResult playResult = game.play(move.player(), move.toDomain());
-    return ResponseEntity.ok(
-        playResult.movedPawns().stream().map(PawnDto::fromDomain).collect(Collectors.toSet()));
+    return ResponseEntity.ok(PlayResultDto.fromDomain(playResult));
   }
 }

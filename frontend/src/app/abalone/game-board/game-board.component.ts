@@ -5,6 +5,7 @@ import {GameService} from "../services/game.service";
 import {Square} from "./model/square";
 import {Player} from "./model/player";
 import {Pawn} from "./model/pawn";
+import {MoveResult} from "./model/move-result";
 
 @Component({
   selector: 'app-game-board',
@@ -18,6 +19,8 @@ export class GameBoardComponent implements OnInit {
   selectedPositions: string[] = [];
   playerTurn: Player | undefined;
   hoveredDirection: string | null = null;
+  capturedBlack: boolean[] = [];
+  capturedWhite: boolean[] = [];
   private maxSelectedPawns: number = 3;
 
   constructor(private gameService: GameService) {
@@ -55,13 +58,13 @@ export class GameBoardComponent implements OnInit {
     const pawnsToMove = this.getSquares(this.selectedPositions)
     .map(square => square.pawn)
     .filter(pawn => pawn !== null) as Pawn[];
-    this.gameService.movePawn(this.playerTurn, pawnsToMove, direction).subscribe((movedPawns: Pawn[]) => {
+    this.gameService.movePawn(this.playerTurn, pawnsToMove, direction).subscribe((movedResult: MoveResult) => {
       this.getPawnSquares(pawnsToMove).forEach(
         square => {
           square.pawn = null;
         }
       )
-      movedPawns.forEach(
+      movedResult.pawns.forEach(
         pawn => {
           const square = this.getSquare(pawn.position);
           if (square) {
@@ -69,6 +72,7 @@ export class GameBoardComponent implements OnInit {
           }
         }
       )
+      this.updateCapturedDisplay(movedResult.blackPawnsLost, movedResult.whitePawnsLost);
       this.cancelSelection();
       this.nextTurn();
     });
@@ -93,6 +97,11 @@ export class GameBoardComponent implements OnInit {
 
   onHover(direction: string | null) {
     this.hoveredDirection = direction;
+  }
+
+  updateCapturedDisplay(blackLost: number, whiteLost: number) {
+    this.capturedBlack = Array(6).fill(false).map((_, i) => i < blackLost);
+    this.capturedWhite = Array(6).fill(false).map((_, i) => i < whiteLost);
   }
 
   private cancelSelection() {

@@ -49,3 +49,19 @@
     </div>
   </div>
 </div>
+<div class="captured-pawns-container">
+  <div class="captured-pawns-row white">
+    <div *ngFor="let filled of capturedWhite; let i = index"
+         [class.filled]="filled"
+         class="pawn">
+    </div>
+  </div>
+
+  <!-- Pions perdus par les noirs (capturés par les blancs) -->
+  <div class="captured-pawns-row black">
+    <div *ngFor="let filled of capturedBlack; let i = index"
+         [class.filled]="filled"
+         class="pawn">
+    </div>
+  </div>
+</div>

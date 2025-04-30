@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Game} from "../game-board/model/game";
 import {Pawn} from "../game-board/model/pawn";
 import {Player} from "../game-board/model/player";
+import {MoveResult} from "../game-board/model/move-result";
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,8 @@ export class GameService {
   }
 
   // TODO : besoin du joueur ?
-  movePawn(player: Player | undefined, pawnsToMove: Pawn[], direction: string): Observable<Pawn[]> {
-    return this.http.post<Pawn[]>(this.movePawnGameUrl, {
+  movePawn(player: Player | undefined, pawnsToMove: Pawn[], direction: string): Observable<MoveResult> {
+    return this.http.post<MoveResult>(this.movePawnGameUrl, {
       player: player,
       pawnsToMove: pawnsToMove,
       direction: direction
