@@ -1,9 +1,18 @@
+.game-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
 .board {
+  padding: 50px 0;
+  background-color: rgba(126, 64, 21, 0.92);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  padding: 10px;
+  border-radius: 500px;
 }
 
 .row {
@@ -26,7 +35,7 @@
 }
 
 .cell.selected {
-  background-color: rgba(161, 161, 61, 0.25);
+  background-color: rgba(247, 255, 89, 0.94);
 }
 
 .cell.has-black-pawn::after {
@@ -56,7 +65,7 @@
 }
 
 .cell.last-move {
-  background-color: rgba(200, 200, 79, 0.33);
+  background-color: rgba(233, 255, 13, 0.68);
   transition: background-color 0.3s ease;
 }
 
@@ -129,7 +138,7 @@
   transform: translate(15%, -50%) rotate(210deg);
 }
 
-.captured-pawns-container {
+.captured-pawns {
   display: flex;
   justify-content: space-around;
   margin: 20px 0;
@@ -137,9 +146,9 @@
 
 .captured-pawns-row {
   display: flex;
-  justify-content: center;
+  justify-content: stretch;
   gap: 10px; /* espace entre les pions */
-  margin: 10px 0;
+  margin: 5px;
 }
 
 .captured-pawns-row .pawn {
@@ -158,13 +167,6 @@
 .captured-pawns-row.white .pawn.filled {
   background-color: white;
   border: 2px solid #333;
-}
-
-.player-label {
-  margin-top: 10px;
-  font-size: 12px;
-  color: #444;
-  text-align: center;
 }
 
 .winner-popup {
@@ -223,4 +225,29 @@
 
 .popup-content button:hover {
   background-color: #004d99;
+}
+
+.game-container {
+  width: 500px;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.player-label {
+  display: flex;
+  gap: 8px;
+  height: 40px;
+}
+
+.label-text {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.player-icon-logo {
+  padding-top: 8px;
+  font-size: 30px;
 }

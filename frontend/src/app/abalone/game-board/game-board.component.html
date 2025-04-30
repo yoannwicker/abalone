@@ -1,79 +1,100 @@
-<div (contextmenu)="onRightClick($event)" class="board">
-  <div *ngFor="let row of board" class="row">
-    <div
-      (click)="selectCell(cell)"
-      *ngFor="let cell of row"
-      [class.has-black-pawn]="cell.hasBlackPawn()"
-      [class.has-white-pawn]="cell.hasWhitePawn()"
-      [class.last-move]="lastMovedPositions.includes(cell.position)"
-      [class.selected]="cell.selected"
-      class="cell"
-    >
-      <ng-container *ngIf="cell.selected">
-        <div (mouseenter)="onHover('E')"
-             (mouseleave)="onHover(null)"
-             class="hover-zone hover-E">
-          <div (click)="move('E')" [class.visible]="hoveredDirection === 'E'"
-               class="arrow arrow-E"></div>
-        </div>
-        <div (mouseenter)="onHover('W')"
-             (mouseleave)="onHover(null)"
-             class="hover-zone hover-W">
-          <div (click)="move('W')" [class.visible]="hoveredDirection === 'W'"
-               class="arrow arrow-W"></div>
-        </div>
-        <div (mouseenter)="onHover('NE')"
-             (mouseleave)="onHover(null)"
-             class="hover-zone hover-NE">
-          <div (click)="move('NE')" [class.visible]="hoveredDirection === 'NE'"
-               class="arrow arrow-NE"></div>
-        </div>
-        <div (mouseenter)="onHover('NW')"
-             (mouseleave)="onHover(null)"
-             class="hover-zone hover-NW">
-          <div (click)="move('NW')" [class.visible]="hoveredDirection === 'NW'"
-               class="arrow arrow-NW"></div>
-        </div>
-        <div (mouseenter)="onHover('SE')"
-             (mouseleave)="onHover(null)"
-             class="hover-zone hover-SE">
-          <div (click)="move('SE')" [class.visible]="hoveredDirection === 'SE'"
-               class="arrow arrow-SE"></div>
-        </div>
-        <div (mouseenter)="onHover('SW')"
-             (mouseleave)="onHover(null)"
-             class="hover-zone hover-SW">
-          <div (click)="move('SW')" [class.visible]="hoveredDirection === 'SW'"
-               class="arrow arrow-SW"></div>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-</div>
-<div class="captured-pawns-container">
-  <div class="captured-pawns-row white">
-    <div *ngFor="let filled of capturedWhite; let i = index"
-         [class.filled]="filled"
-         class="pawn">
-    </div>
-  </div>
+<div class="game-board">
+  <div class="game-container">
 
-  <!-- Pions perdus par les noirs (capturés par les blancs) -->
-  <div class="captured-pawns-row black">
-    <div *ngFor="let filled of capturedBlack; let i = index"
-         [class.filled]="filled"
-         class="pawn">
+    <!-- Adversaire -->
+    <div class="player-info-container">
+      <div class="player-label">
+        <span class="player-icon-logo">⚪</span>
+        <span class="label-text">Adversaire</span>
+      </div>
+      <!-- Pions perdus par les noirs (capturés par les blancs) -->
+      <div class="captured-pawns captured-pawns-row black">
+        <div *ngFor="let filled of capturedBlack; let i = index"
+             [class.filled]="filled"
+             class="pawn">
+        </div>
+      </div>
+    </div>
+
+    <div (contextmenu)="onRightClick($event)" class="board">
+      <div *ngFor="let row of board" class="row">
+        <div
+          (click)="selectCell(cell)"
+          *ngFor="let cell of row"
+          [class.has-black-pawn]="cell.hasBlackPawn()"
+          [class.has-white-pawn]="cell.hasWhitePawn()"
+          [class.last-move]="lastMovedPositions.includes(cell.position)"
+          [class.selected]="cell.selected"
+          class="cell"
+        >
+          <ng-container *ngIf="cell.selected">
+            <div (mouseenter)="onHover('E')"
+                 (mouseleave)="onHover(null)"
+                 class="hover-zone hover-E">
+              <div (click)="move('E')" [class.visible]="hoveredDirection === 'E'"
+                   class="arrow arrow-E"></div>
+            </div>
+            <div (mouseenter)="onHover('W')"
+                 (mouseleave)="onHover(null)"
+                 class="hover-zone hover-W">
+              <div (click)="move('W')" [class.visible]="hoveredDirection === 'W'"
+                   class="arrow arrow-W"></div>
+            </div>
+            <div (mouseenter)="onHover('NE')"
+                 (mouseleave)="onHover(null)"
+                 class="hover-zone hover-NE">
+              <div (click)="move('NE')" [class.visible]="hoveredDirection === 'NE'"
+                   class="arrow arrow-NE"></div>
+            </div>
+            <div (mouseenter)="onHover('NW')"
+                 (mouseleave)="onHover(null)"
+                 class="hover-zone hover-NW">
+              <div (click)="move('NW')" [class.visible]="hoveredDirection === 'NW'"
+                   class="arrow arrow-NW"></div>
+            </div>
+            <div (mouseenter)="onHover('SE')"
+                 (mouseleave)="onHover(null)"
+                 class="hover-zone hover-SE">
+              <div (click)="move('SE')" [class.visible]="hoveredDirection === 'SE'"
+                   class="arrow arrow-SE"></div>
+            </div>
+            <div (mouseenter)="onHover('SW')"
+                 (mouseleave)="onHover(null)"
+                 class="hover-zone hover-SW">
+              <div (click)="move('SW')" [class.visible]="hoveredDirection === 'SW'"
+                   class="arrow arrow-SW"></div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="player-info-container">
+      <!-- Joueur -->
+      <div class="player-label">
+        <span class="player-icon-logo">⚫</span>
+        <span class="label-text">Joueur</span>
+      </div>
+      <!-- Pions blancs perdus -->
+      <div class="lost-pawns white">
+        <div class="captured-pawns captured-pawns-row white">
+          <div *ngFor="let filled of capturedWhite; let i = index"
+               [class.filled]="filled"
+               class="pawn">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-<div *ngIf="winner" class="winner-popup">
-  <div class="popup-content">
-    <p>{{ winner }} a gagné par mat contre {{ otherPlayer(winner) }}</p>
-    <div class="player-icons">
-      <div class="player-icon">⚫</div>
-      <div class="vs-text">vs</div>
-      <div class="player-icon">⚪</div>
+  <div *ngIf="winner" class="winner-popup">
+    <div class="popup-content">
+      <p>{{ winner }} a gagné par mat contre {{ otherPlayer(winner) }}</p>
+      <div class="player-icons">
+        <div class="player-icon">⚫</div>
+        <div class="vs-text">vs</div>
+        <div class="player-icon">⚪</div>
+      </div>
+      <button (click)="restartGame()">Rejouer</button>
     </div>
-    <button (click)="restartGame()">Rejouer</button>
   </div>
 </div>
