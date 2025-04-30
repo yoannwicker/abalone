@@ -70,7 +70,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
 
       Pawn blackPawn = new Pawn(BLACK, B3);
       Move validBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
@@ -86,7 +86,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
 
       Pawn blackPawn = new Pawn(BLACK, B3);
       Move validBlackMove = new Move(blackPawn, Direction.MOVE_FORWARD_Y);
@@ -103,9 +103,9 @@ class GameTest {
           new Game(
               WHITE,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
 
-      Pawn whitePawn = new Pawn(WHITE, H3);
+      Pawn whitePawn = new Pawn(WHITE, H6);
       Move validWhiteMove = new Move(whitePawn, Direction.MOVE_BACK_Y);
 
       // when then
@@ -120,7 +120,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       game.drawMatch();
 
       Pawn blackPawn = new Pawn(BLACK, B3);
@@ -142,7 +142,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
 
       // when
       var playResult = game.drawMatch();
@@ -161,7 +161,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6));
 
       // when then
       assertThatThrownBy(game::drawMatch).isInstanceOf(IllegalStateException.class);
@@ -229,14 +229,14 @@ class GameTest {
       Pawn blackPawn = new Pawn(BLACK, C3);
       game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Y));
 
-      Pawn pawn = new Pawn(WHITE, G5);
+      Pawn pawn = new Pawn(WHITE, G7);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_BACK_Y);
       var playResult = game.play(WHITE, move);
 
       // then
-      var expectedPawn = new Pawn(WHITE, F5);
+      var expectedPawn = new Pawn(WHITE, F6);
       assertThat(playResult.movedPawns()).containsExactly(expectedPawn);
       assertThatNoPawnLost(playResult);
     }
@@ -265,14 +265,14 @@ class GameTest {
       Pawn blackPawn = new Pawn(BLACK, C3);
       game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Z));
 
-      Pawn pawn = new Pawn(WHITE, G5);
+      Pawn pawn = new Pawn(WHITE, G7);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_BACK_Z);
       var playResult = game.play(WHITE, move);
 
       // then
-      var expectedPawn = new Pawn(WHITE, F6);
+      var expectedPawn = new Pawn(WHITE, F7);
       assertThat(playResult.movedPawns()).containsExactly(expectedPawn);
       assertThatNoPawnLost(playResult);
     }
@@ -297,7 +297,7 @@ class GameTest {
       Pawn blackPawn = new Pawn(BLACK, C5);
       game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
 
-      Pawn pawn = new Pawn(WHITE, G2);
+      Pawn pawn = new Pawn(WHITE, G4);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_BACK_X);
@@ -312,7 +312,7 @@ class GameTest {
 
       var blackPlayResult =
           game.play(BLACK, new Move(new Pawn(BLACK, C5), Direction.MOVE_FORWARD_X));
-      var whitePlayResult = game.play(WHITE, new Move(new Pawn(WHITE, G3), Direction.MOVE_BACK_X));
+      var whitePlayResult = game.play(WHITE, new Move(new Pawn(WHITE, G5), Direction.MOVE_BACK_X));
 
       // when then
       assertThatCode(
@@ -344,7 +344,7 @@ class GameTest {
       Pawn blackPawn = new Pawn(BLACK, C5);
       game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
 
-      Pawn pawn = new Pawn(WHITE, G3);
+      Pawn pawn = new Pawn(WHITE, G5);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
@@ -373,7 +373,7 @@ class GameTest {
       Game game = new Game(WHITE, blackPawnMidboard(), whitePawnMidboard());
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
-      Pawn pawn = new Pawn(WHITE, F4);
+      Pawn pawn = new Pawn(WHITE, F5);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_BACK_X);
@@ -407,7 +407,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       assertThatPawnLost(game.blackPlayerPawns, 5);
       assertThatPawnLost(game.whitePlayerPawns, 5);
 
@@ -432,11 +432,11 @@ class GameTest {
           new Game(
               WHITE,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       assertThatPawnLost(game.blackPlayerPawns, 5);
       assertThatPawnLost(game.whitePlayerPawns, 5);
 
-      Pawn pawn = new Pawn(WHITE, I1);
+      Pawn pawn = new Pawn(WHITE, I5);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_FORWARD_Z);
@@ -501,8 +501,8 @@ class GameTest {
       Game game =
           new Game(
               BLACK,
-              blackPawns(A1, A2, A3, A4, A5, B1, B2, G2, F3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, C2, D3));
+              blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
       assertThatPawnLost(game.blackPlayerPawns, 5);
       assertThatPawnLost(game.whitePlayerPawns, 5);
 
@@ -528,20 +528,20 @@ class GameTest {
       Game game =
           new Game(
               WHITE,
-              blackPawns(A1, A2, A3, A4, A5, B1, B2, G2, F3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, C2, D3));
+              blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
       assertThatPawnLost(game.blackPlayerPawns, 5);
       assertThatPawnLost(game.whitePlayerPawns, 5);
 
-      Pawn firstPawn = new Pawn(WHITE, I1);
-      Pawn secondPawn = new Pawn(WHITE, I2);
+      Pawn firstPawn = new Pawn(WHITE, I5);
+      Pawn secondPawn = new Pawn(WHITE, I6);
 
       // when
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_BACK_X);
       var playResult = game.play(WHITE, move);
 
       // then
-      var expectedPawn = new Pawn(WHITE, I1);
+      var expectedPawn = new Pawn(WHITE, I5);
       assertThat(playResult.movedPawns()).containsExactly(expectedPawn);
       assertThat(playResult)
           .extracting(
@@ -578,7 +578,7 @@ class GameTest {
       // then
       Pawn expectedFirstPawn = new Pawn(BLACK, D6);
       Pawn expectedSecondPawn = new Pawn(BLACK, E7);
-      Pawn expectedMovedWhitePawn = new Pawn(WHITE, F7);
+      Pawn expectedMovedWhitePawn = new Pawn(WHITE, F8);
       assertThat(playResult.movedPawns())
           .containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedMovedWhitePawn);
       assertThat(playResult)
@@ -592,21 +592,21 @@ class GameTest {
       Game game =
           new Game(
               BLACK,
-              blackPawns(A1, A2, A3, A4, A5, B1, B2, G2, F3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, C2, D3));
+              blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
       assertThatPawnLost(game.blackPlayerPawns, 5);
       assertThatPawnLost(game.whitePlayerPawns, 5);
 
-      Pawn firstPawn = new Pawn(BLACK, G2);
-      Pawn secondPawn = new Pawn(BLACK, F3);
+      Pawn firstPawn = new Pawn(BLACK, G4);
+      Pawn secondPawn = new Pawn(BLACK, F4);
 
       // when
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Z);
       var playResult = game.play(BLACK, move);
 
       // then
-      var expectedFirstPawn = new Pawn(BLACK, H1);
-      var expectedSecondPawn = new Pawn(BLACK, G2);
+      var expectedFirstPawn = new Pawn(BLACK, H4);
+      var expectedSecondPawn = new Pawn(BLACK, G4);
       assertThat(playResult.movedPawns())
           .containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn);
       assertThat(playResult)
@@ -621,8 +621,8 @@ class GameTest {
       Game game =
           new Game(
               WHITE,
-              blackPawns(A1, A2, A3, A4, A5, B1, B2, G2, F3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, C2, D3));
+              blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
       assertThatPawnLost(game.blackPlayerPawns, 5);
       assertThatPawnLost(game.whitePlayerPawns, 5);
 
@@ -656,15 +656,15 @@ class GameTest {
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
-      Pawn firstWhitePawn = new Pawn(WHITE, F6);
-      Pawn secondWhitePawn = new Pawn(WHITE, G5);
+      Pawn firstWhitePawn = new Pawn(WHITE, F7);
+      Pawn secondWhitePawn = new Pawn(WHITE, G7);
 
       // when
       Move move = new Move(Set.of(firstWhitePawn, secondWhitePawn), Direction.MOVE_BACK_Z);
       var playResult = game.play(WHITE, move);
 
       // then
-      Pawn expectedFirstPawn = new Pawn(WHITE, F6);
+      Pawn expectedFirstPawn = new Pawn(WHITE, F7);
       Pawn expectedSecondPawn = new Pawn(WHITE, E7);
       Pawn expectedMovedBlackPawn = new Pawn(BLACK, D7);
       assertThat(playResult.movedPawns())
@@ -695,7 +695,7 @@ class GameTest {
     void
         should_not_be_able_to_move_two_black_pawns_when_there_is_one_white_pawn_one_black_pawn_in_front() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(new Pawn(BLACK, F7)), whitePawnMidboard());
+      Game game = new Game(BLACK, blackPawnMidboard(new Pawn(BLACK, F8)), whitePawnMidboard());
       assertThatPawnLost(game.blackPlayerPawns, 3);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
@@ -742,9 +742,9 @@ class GameTest {
 
       game.play(BLACK, new Move(Set.of(new Pawn(BLACK, C3)), Direction.MOVE_FORWARD_Y));
 
-      Pawn firstPawn = new Pawn(WHITE, I5);
-      Pawn secondPawn = new Pawn(WHITE, H5);
-      Pawn thirdPawn = new Pawn(WHITE, G5);
+      Pawn firstPawn = new Pawn(WHITE, I9);
+      Pawn secondPawn = new Pawn(WHITE, H8);
+      Pawn thirdPawn = new Pawn(WHITE, G7);
 
       // when
       Set<Pawn> pawnsToMove = Set.of(firstPawn, secondPawn, thirdPawn);
@@ -752,9 +752,9 @@ class GameTest {
       var playResult = game.play(WHITE, move);
 
       // then
-      var expectedFirstPawn = new Pawn(WHITE, F5);
-      var expectedSecondPawn = new Pawn(WHITE, G5);
-      var expectedThirdPawn = new Pawn(WHITE, H5);
+      var expectedFirstPawn = new Pawn(WHITE, F6);
+      var expectedSecondPawn = new Pawn(WHITE, G7);
+      var expectedThirdPawn = new Pawn(WHITE, H8);
       assertThat(playResult.movedPawns())
           .containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn, expectedThirdPawn);
       assertThatNoPawnLost(playResult);
@@ -767,9 +767,9 @@ class GameTest {
           new Game(
               WHITE,
               blackPawns(C3, C4, C5, D3, D4, D5, E4, E5, C2),
-              whitePawns(H3, H4, G2, G3, G4, G5, G6, F3, F4, F5, E6, D6));
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, E6, D6));
 
-      Pawn firstPawn = new Pawn(WHITE, F5);
+      Pawn firstPawn = new Pawn(WHITE, F6);
       Pawn secondPawn = new Pawn(WHITE, E6);
       Pawn thirdPawn = new Pawn(WHITE, D6);
 
@@ -807,9 +807,9 @@ class GameTest {
       // then
       Pawn expectedFirstPawn = new Pawn(BLACK, D5);
       Pawn expectedSecondPawn = new Pawn(BLACK, E6);
-      Pawn expectedThirdPawn = new Pawn(BLACK, F6);
-      Pawn expectedFirstWhitePawn = new Pawn(WHITE, G6);
-      Pawn expectedSecondWhitePawn = new Pawn(WHITE, H6);
+      Pawn expectedThirdPawn = new Pawn(BLACK, F7);
+      Pawn expectedFirstWhitePawn = new Pawn(WHITE, G8);
+      Pawn expectedSecondWhitePawn = new Pawn(WHITE, H9);
       assertThat(playResult.movedPawns())
           .containsExactlyInAnyOrder(
               expectedFirstPawn,
@@ -826,9 +826,9 @@ class GameTest {
     void move_three_white_pawns_and_two_black_pawns() {
       // given
       Game game = new Game(WHITE, blackPawnMidboard(), whitePawnMidboard());
-      Pawn firstPawn = new Pawn(WHITE, F5);
-      Pawn secondPawn = new Pawn(WHITE, G4);
-      Pawn thirdPawn = new Pawn(WHITE, H3);
+      Pawn firstPawn = new Pawn(WHITE, F6);
+      Pawn secondPawn = new Pawn(WHITE, G6);
+      Pawn thirdPawn = new Pawn(WHITE, H6);
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
@@ -838,8 +838,8 @@ class GameTest {
 
       // then
       Pawn expectedFirstPawn = new Pawn(WHITE, E6);
-      Pawn expectedSecondPawn = new Pawn(WHITE, F5);
-      Pawn expectedThirdPawn = new Pawn(WHITE, G4);
+      Pawn expectedSecondPawn = new Pawn(WHITE, F6);
+      Pawn expectedThirdPawn = new Pawn(WHITE, G6);
       Pawn expectedFirstBlackPawn = new Pawn(BLACK, D6);
       Pawn expectedSecondBlackPawn = new Pawn(BLACK, C6);
       assertThat(playResult.movedPawns())
@@ -857,7 +857,7 @@ class GameTest {
     @Test
     void should_not_be_able_to_move_three_black_pawns_when_there_is_three_white_pawns_in_front() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard(new Pawn(WHITE, H6)));
+      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard(new Pawn(WHITE, H9)));
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 1);
 
@@ -876,7 +876,7 @@ class GameTest {
     void
         should_not_be_able_to_move_three_black_pawns_when_there_is_two_white_pawns_one_black_pawn_in_front() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(new Pawn(BLACK, H6)), whitePawnMidboard());
+      Game game = new Game(BLACK, blackPawnMidboard(new Pawn(BLACK, H9)), whitePawnMidboard());
       assertThatPawnLost(game.blackPlayerPawns, 3);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
@@ -902,7 +902,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, D3, E3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       Pawn firstPawn = new Pawn(BLACK, D3);
       Pawn secondPawn = new Pawn(BLACK, E3);
 
@@ -924,7 +924,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, D3, E3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       Pawn firstPawn = new Pawn(BLACK, D3);
       Pawn secondPawn = new Pawn(BLACK, E3);
 
@@ -946,7 +946,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, D3, E3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       Pawn firstPawn = new Pawn(BLACK, D3);
       Pawn secondPawn = new Pawn(BLACK, E3);
 
@@ -956,7 +956,7 @@ class GameTest {
 
       // then
       var expectedFirstPawn = new Pawn(BLACK, E4);
-      var expectedSecondPawn = new Pawn(BLACK, F3);
+      var expectedSecondPawn = new Pawn(BLACK, F4);
       assertThat(playResult.movedPawns())
           .containsExactlyInAnyOrder(expectedFirstPawn, expectedSecondPawn);
     }
@@ -968,7 +968,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, D3, E3),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       Pawn firstPawn = new Pawn(BLACK, D3);
       Pawn secondPawn = new Pawn(BLACK, E3);
 
@@ -990,7 +990,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, D3, D4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       Pawn firstPawn = new Pawn(BLACK, D3);
       Pawn secondPawn = new Pawn(BLACK, D4);
 
@@ -1012,7 +1012,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, D3, D4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
       Pawn firstPawn = new Pawn(BLACK, D3);
       Pawn secondPawn = new Pawn(BLACK, D4);
 
@@ -1066,7 +1066,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
 
       Pawn firstPawn = new Pawn(BLACK, B1);
       Pawn secondPawn = new Pawn(BLACK, B2);
@@ -1092,7 +1092,7 @@ class GameTest {
           new Game(
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
-              whitePawns(I1, I2, I3, I4, I5, H1, H2, H3, H4, C2));
+              whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7, C2));
       assertThatPawnLost(game.blackPlayerPawns, 5);
       assertThatPawnLost(game.whitePlayerPawns, 4);
       Pawn firstPawn = new Pawn(BLACK, B1);

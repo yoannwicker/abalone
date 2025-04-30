@@ -12,7 +12,7 @@ public record Pawn(Player player, SquarePosition squarePosition) {
       Set.of(A1, A2, A3, A4, A5, B1, B2, B3, B4, B5, B6, C3, C4, C5);
 
   private static final Set<SquarePosition> WHITE_PAWN_INITIAL_POSITIONS =
-      Set.of(I1, I2, I3, I4, I5, H1, H2, H3, H4, H5, H6, G3, G4, G5);
+      Set.of(I5, I6, I7, I8, I9, H4, H5, H6, H7, H8, H9, G5, G6, G7);
 
   public static Set<Pawn> createBlackPawns() {
     return BLACK_PAWN_INITIAL_POSITIONS.stream()

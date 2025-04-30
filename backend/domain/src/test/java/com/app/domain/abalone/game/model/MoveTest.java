@@ -33,7 +33,7 @@ class MoveTest {
     Pawn firstPawn = new Pawn(Player.BLACK, C5);
     Pawn secondPawn = new Pawn(Player.BLACK, D6);
     Pawn thirdPawn = new Pawn(Player.BLACK, E7);
-    Pawn fouthPawn = new Pawn(Player.BLACK, F7);
+    Pawn fouthPawn = new Pawn(Player.BLACK, F8);
 
     assertThatThrownBy(
             () ->
@@ -59,7 +59,7 @@ class MoveTest {
     // given
     Pawn firstPawn = new Pawn(Player.BLACK, C5);
     Pawn secondPawn = new Pawn(Player.BLACK, D6);
-    Pawn thirdPawn = new Pawn(Player.BLACK, F7);
+    Pawn thirdPawn = new Pawn(Player.BLACK, F8);
 
     assertThatThrownBy(
             () -> new Move(Set.of(firstPawn, secondPawn, thirdPawn), Direction.MOVE_FORWARD_Y))

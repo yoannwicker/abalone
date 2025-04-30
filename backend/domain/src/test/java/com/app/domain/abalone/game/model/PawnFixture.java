@@ -13,7 +13,7 @@ public class PawnFixture {
       Set.of(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6);
 
   private static final Set<SquarePosition> WHITE_PAWN_MIDBOARD_POSITIONS =
-      Set.of(H3, H4, G2, G3, G4, G5, G6, F3, F4, F5, F6, E7);
+      Set.of(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7);
 
   public static Set<Pawn> blackPawnMidboard() {
     return BLACK_PAWN_MIDBOARD_POSITIONS.stream()

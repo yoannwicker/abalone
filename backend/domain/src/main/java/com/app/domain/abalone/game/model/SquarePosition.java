@@ -42,7 +42,6 @@ public enum SquarePosition {
   E7(E, 7),
   E8(E, 8),
   E9(E, 9),
-  F1(F, 1),
   F2(F, 2),
   F3(F, 3),
   F4(F, 4),
@@ -50,24 +49,25 @@ public enum SquarePosition {
   F6(F, 6),
   F7(F, 7),
   F8(F, 8),
-  G1(G, 1),
-  G2(G, 2),
+  F9(F, 9),
   G3(G, 3),
   G4(G, 4),
   G5(G, 5),
   G6(G, 6),
   G7(G, 7),
-  H1(H, 1),
-  H2(H, 2),
-  H3(H, 3),
+  G8(G, 8),
+  G9(G, 9),
   H4(H, 4),
   H5(H, 5),
   H6(H, 6),
-  I1(I, 1),
-  I2(I, 2),
-  I3(I, 3),
-  I4(I, 4),
-  I5(I, 5);
+  H7(H, 7),
+  H8(H, 8),
+  H9(H, 9),
+  I5(I, 5),
+  I6(I, 6),
+  I7(I, 7),
+  I8(I, 8),
+  I9(I, 9);
 
   private final BoardLine line;
   private final int number;
@@ -95,10 +95,10 @@ public enum SquarePosition {
     return switch (direction) {
       case MOVE_FORWARD_X -> from(Optional.of(line), number + 1);
       case MOVE_BACK_X -> from(Optional.of(line), number - 1);
-      case MOVE_FORWARD_Y -> from(line.next(), line.inBottomTheBoard() ? number + 1 : number);
-      case MOVE_BACK_Y -> from(line.previous(), line.inAboveTheBoard() ? number : number - 1);
-      case MOVE_FORWARD_Z -> from(line.next(), line.inBottomTheBoard() ? number : number - 1);
-      case MOVE_BACK_Z -> from(line.previous(), line.inAboveTheBoard() ? number + 1 : number);
+      case MOVE_FORWARD_Y -> from(line.next(), number + 1);
+      case MOVE_BACK_Y -> from(line.previous(), number - 1);
+      case MOVE_FORWARD_Z -> from(line.next(), number);
+      case MOVE_BACK_Z -> from(line.previous(), number);
     };
   }
 
@@ -108,15 +108,17 @@ public enum SquarePosition {
     }
 
     if (nextPosition.line.equals(line.next().orElse(null))) {
-      if (line.inBottomTheBoard() && nextPosition.number > number
-          || nextPosition.line.inAboveTheBoard() && nextPosition.number == number) {
-        return Direction.MOVE_FORWARD_Y;
+      if (nextPosition.number == number) {
+        return Direction.MOVE_FORWARD_Z;
       }
-      return Direction.MOVE_FORWARD_Z;
+      return Direction.MOVE_FORWARD_Y;
     }
 
     if (nextPosition.line.equals(line.previous().orElse(null))) {
-      return Direction.MOVE_BACK_Z;
+      if (nextPosition.number == number) {
+        return Direction.MOVE_BACK_Z;
+      }
+      return Direction.MOVE_BACK_Y;
     }
 
     throw new IllegalArgumentException(
