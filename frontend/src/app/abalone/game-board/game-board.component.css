@@ -55,6 +55,11 @@
   box-shadow: 0 0 0 3px white;
 }
 
+.cell.last-move {
+  background-color: rgba(200, 200, 79, 0.33);
+  transition: background-color 0.3s ease;
+}
+
 .controls {
   margin-top: 10px;
   display: flex;

@@ -5,6 +5,7 @@
       *ngFor="let cell of row"
       [class.has-black-pawn]="cell.hasBlackPawn()"
       [class.has-white-pawn]="cell.hasWhitePawn()"
+      [class.last-move]="lastMovedPositions.includes(cell.position)"
       [class.selected]="cell.selected"
       class="cell"
     >

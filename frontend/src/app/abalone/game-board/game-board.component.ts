@@ -21,6 +21,7 @@ export class GameBoardComponent implements OnInit {
   hoveredDirection: string | null = null;
   capturedBlack: boolean[] = [];
   capturedWhite: boolean[] = [];
+  lastMovedPositions: string[] = [];
   private maxSelectedPawns: number = 3;
 
   constructor(private gameService: GameService) {
@@ -72,6 +73,9 @@ export class GameBoardComponent implements OnInit {
           }
         }
       )
+      this.lastMovedPositions = pawnsToMove
+      .map(pawn => pawn.position)
+      .concat(movedResult.pawns.filter(pawn => pawn.playerOwner === this.playerTurn).map(pawn => pawn.position));
       this.updateCapturedDisplay(movedResult.blackPawnsLost, movedResult.whitePawnsLost);
       this.cancelSelection();
       this.nextTurn();
