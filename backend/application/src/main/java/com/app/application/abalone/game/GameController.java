@@ -25,6 +25,10 @@ public class GameController {
     return ResponseEntity.ok(GameDto.fromGame(game));
   }
 
+  // TODO: Utiliser Redux pour gerer l'état du jeu
+  // TODO: Ajouter la possibilité de faire null par accord (popup à modifier)
+  // TODO: Ajouter un timer / regle de null ou defaite ...etc -> url différente (choix du timer ?)
+  // TODO: se connecter pour jouer
   @PostMapping(value = "move", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PlayResultDto> move(@RequestBody MoveDto move) {
     try {
