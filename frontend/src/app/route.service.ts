@@ -6,7 +6,8 @@ import {Router} from "@angular/router";
 })
 export class RouteService {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
   public goToLogin(): void {
     this.router.navigate(['/login']).then();
@@ -16,7 +17,7 @@ export class RouteService {
     this.router.navigate(['/register']).then();
   }
 
-  public goToSearch(): void {
-    this.router.navigate(['/search']).then();
+  public goToGame(): void {
+    this.router.navigate(['/game']).then();
   }
 }

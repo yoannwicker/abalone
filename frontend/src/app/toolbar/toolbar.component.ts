@@ -45,7 +45,8 @@ export class ToolbarComponent {
     this.isUserMenuOpen = false;
   }
 
-  goToSearch() {
-    this.routeService.goToSearch();
+  goToGame() {
+    this.routeService.goToGame();
+    this.isUserMenuOpen = false;
   }
 }

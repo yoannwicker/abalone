@@ -9,9 +9,9 @@ import {RouteService} from "../route.service";
   providedIn: 'root'
 })
 export class AuthService {
+  public currentUser: Observable<any>;
   private apiUrl = '/api/auth';
   private currentUserSubject: BehaviorSubject<any>;
-  public currentUser: Observable<any>;
 
   constructor(private http: HttpClient, private routeService: RouteService) {
     // @ts-ignore
@@ -42,6 +42,6 @@ export class AuthService {
   logout() {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
-    this.routeService.goToSearch();
+    this.routeService.goToLogin();
   }
 }

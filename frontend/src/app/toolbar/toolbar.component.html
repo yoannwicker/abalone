@@ -13,12 +13,12 @@
 
   <nav *ngIf="isMobileMenuOpen" class="mobile-menu">
     <ul>
-      <li><a href="#" (click)="goToSearch()">Recherche</a></li>
+      <li><a (click)="goToGame()" href="#">Jeu</a></li>
     </ul>
   </nav>
 
   <nav *ngIf="!isMobileMenuOpen" class="desktop-menu">
-    <button class="toolbar-button" (click)="goToSearch()">Recherche</button>
+    <button (click)="goToGame()" class="toolbar-button">Jeu</button>
   </nav>
 
 
@@ -34,7 +34,7 @@
           <div>Mon Profil</div>
         </li>
         <li>
-          <div (click)="goToSearch()">Recherche</div>
+          <div (click)="goToGame()">Jeu</div>
         </li>
         <li>
           <div (click)="logout()">Déconnexion</div>
