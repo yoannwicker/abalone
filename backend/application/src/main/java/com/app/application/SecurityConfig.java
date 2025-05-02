@@ -18,8 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-  @Autowired
-  private JwtRequestFilter jwtRequestFilter;
+  @Autowired private JwtRequestFilter jwtRequestFilter;
 
   @Bean
   public AuthenticationManager authenticationManager(
@@ -29,13 +28,16 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(
-            AbstractHttpConfigurer::disable) // Note: Instead of disabling csrf, consider using csrf().ignoringAntMatchers("/api/auth/**")
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/auth/**").permitAll()
-            .anyRequest().authenticated()
-        )
+    http.csrf(AbstractHttpConfigurer::disable) // Note: Instead of disabling csrf, consider using
+        // csrf().ignoringAntMatchers("/api/auth/**")
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/api/game/**")
+                    .permitAll()
+                    .requestMatchers("/api/auth/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();

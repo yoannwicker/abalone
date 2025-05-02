@@ -29,8 +29,8 @@ export const appConfig: ApplicationConfig = {
           disallowedRoutes: [
             'http://${environment.apiDomain}/api/auth/login',
             'http://${environment.apiDomain}/api/auth/register',
-            'http://${environment.apiDomain}/api/auth/new',
-            'http://${environment.apiDomain}/api/auth/move'
+            'http://${environment.apiDomain}/api/game/new',
+            'http://${environment.apiDomain}/api/game/move'
           ]
         }
       })

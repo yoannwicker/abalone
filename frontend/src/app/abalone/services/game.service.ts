@@ -11,8 +11,8 @@ import {MoveResult} from "../game-board/model/move-result";
 })
 export class GameService {
   // TODO : replace auth by game
-  private newGameUrl = '/api/auth/new';
-  private movePawnGameUrl = '/api/auth/move';
+  private newGameUrl = '/api/game/new';
+  private movePawnGameUrl = '/api/game/move';
 
   constructor(private http: HttpClient) {
   }
