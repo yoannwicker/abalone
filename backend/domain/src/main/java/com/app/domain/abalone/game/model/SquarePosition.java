@@ -86,9 +86,26 @@ public enum SquarePosition {
         .findAny();
   }
 
-  public boolean isSideTo(SquarePosition squarePosition) {
-    return Math.abs(number - squarePosition.number) <= 1
-        && Math.abs(line.ordinal() - squarePosition.line.ordinal()) <= 1;
+  public boolean isAdjacent(SquarePosition squarePosition) {
+    return isXLineNeighbor(squarePosition)
+        || isYDiagonalNeighbor(squarePosition)
+        || isZDiagonalNeighbor(squarePosition);
+  }
+
+  private boolean isXLineNeighbor(SquarePosition squarePosition) {
+    return line.equals(squarePosition.line) && Math.abs(number - squarePosition.number) == 1;
+  }
+
+  private boolean isYDiagonalNeighbor(SquarePosition squarePosition) {
+    return Math.abs(line.ordinal() - squarePosition.line.ordinal()) == 1
+        && number == squarePosition.number;
+  }
+
+  private boolean isZDiagonalNeighbor(SquarePosition squarePosition) {
+    return line.equals(squarePosition.line.next().orElse(null))
+            && number - squarePosition.number == 1
+        || line.equals(squarePosition.line.previous().orElse(null))
+            && number - squarePosition.number == -1;
   }
 
   public Optional<SquarePosition> next(Direction direction) {

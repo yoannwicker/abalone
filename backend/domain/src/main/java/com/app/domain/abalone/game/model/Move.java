@@ -47,7 +47,7 @@ public final class Move {
           pawnsToMove.stream().sorted(Comparator.comparing(Pawn::squarePosition)).toList();
       Pawn firstPawn = sortedPawnsToMove.get(0);
       Pawn secondPawn = sortedPawnsToMove.get(1);
-      boolean areFirstTwoPawnsAdjacent = firstPawn.isSideTo(secondPawn);
+      boolean areFirstTwoPawnsAdjacent = firstPawn.isAdjacentTo(secondPawn);
       if (pawnsToMove.size() > 2) {
         Pawn thirdPawn = sortedPawnsToMove.get(2);
         var direction = firstPawn.directionTo(secondPawn);

@@ -34,8 +34,8 @@ public record Pawn(Player player, SquarePosition squarePosition) {
     return new Pawn(player.nextPlayer(), squarePosition);
   }
 
-  public boolean isSideTo(Pawn pawn) {
-    return squarePosition.isSideTo(pawn.squarePosition);
+  public boolean isAdjacentTo(Pawn pawn) {
+    return squarePosition.isAdjacent(pawn.squarePosition);
   }
 
   public boolean hasProjection(Direction direction, Pawn pawnProjection) {
