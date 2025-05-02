@@ -32,7 +32,7 @@ export class ToolbarComponent {
     );
   }
 
-  toggleMenu() {
+  toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
@@ -42,7 +42,7 @@ export class ToolbarComponent {
 
   logout() {
     this.authService.logout()
-    this.routeService.goToSearch();
+    this.isUserMenuOpen = false;
   }
 
   goToSearch() {

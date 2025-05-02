@@ -90,7 +90,8 @@
   padding: 10px;
 }
 
-.user-menu li a {
+.user-menu li div {
+  cursor: pointer;
   color: white;
   text-decoration: none;
 }

@@ -1,14 +1,15 @@
 <header class="toolbar">
-  <button mat-icon-button class="mobile-hamburger-menu" aria-label="Example icon-button with menu icon" (click)="toggleMenu()">
+  <button (click)="toggleMobileMenu()" aria-label="Example icon-button with menu icon"
+          class="mobile-hamburger-menu" mat-icon-button>
     <mat-icon>menu</mat-icon>
     <span></span>
     <span></span>
     <span></span>
   </button>
 
-  <img class="logo" [alt]="applicationName" [src]="appLogo">
+  <img [alt]="applicationName" [src]="appLogo" class="logo">
 
-  <span class="app-name" > {{ applicationName }} </span>
+  <span class="app-name"> {{ applicationName }} </span>
 
   <nav *ngIf="isMobileMenuOpen" class="mobile-menu">
     <ul>
@@ -22,14 +23,22 @@
 
 
   <div *ngIf="isLoggedIn" class="user-menu-container">
-    <button mat-icon-button class="user-icon" aria-label="Example icon-button with menu icon" (click)="toggleUserMenu()">
+    <button (click)="toggleUserMenu()" aria-label="Example icon-button with menu icon"
+            class="user-icon"
+            mat-icon-button>
       <mat-icon>account_circle</mat-icon>
     </button>
     <nav *ngIf="isUserMenuOpen" class="user-menu">
       <ul>
-        <li><a href="#">Mon Profil</a></li>
-        <li><a href="#">Paramètres</a></li>
-        <li><a href="#" (click)="logout()">Déconnexion</a></li>
+        <li>
+          <div>Mon Profil</div>
+        </li>
+        <li>
+          <div (click)="goToSearch()">Recherche</div>
+        </li>
+        <li>
+          <div (click)="logout()">Déconnexion</div>
+        </li>
       </ul>
     </nav>
   </div>
