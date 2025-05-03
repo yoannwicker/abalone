@@ -7,12 +7,14 @@ import {Player} from "./model/player";
 import {Pawn} from "./model/pawn";
 import {MoveResult} from "./model/move-result";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {SquareComponent} from "./square/square.component";
+import {PlayerGameInfoComponent} from "./player-game-info/player-game-info.component";
 
 @Component({
   selector: 'app-game-board',
   standalone: true,
   imports: [NgFor, NgIf,
-    CommonModule],
+    CommonModule, SquareComponent, PlayerGameInfoComponent],
   templateUrl: './game-board.component.html',
   styleUrl: './game-board.component.css'
 })
@@ -21,10 +23,11 @@ export class GameBoardComponent implements OnInit {
   selectedPositions: string[] = [];
   playerTurn: Player | undefined;
   hoveredDirection: string | null = null;
-  capturedBlack: boolean[] = [];
-  capturedWhite: boolean[] = [];
   lastMovedPositions: string[] = [];
   winner: Player | null = null;
+  protected blackPawnsLost: number = 0;
+  protected whitePawnsLost: number = 0;
+  protected readonly Player = Player;
   private maxSelectedPawns: number = 3;
 
   constructor(private gameService: GameService, private snackBar: MatSnackBar) {
@@ -77,7 +80,8 @@ export class GameBoardComponent implements OnInit {
         .map(pawn => pawn.position)
         .concat(movedResult.pawns.filter(pawn => pawn.playerOwner === this.playerTurn).map(pawn => pawn.position));
         this.winner = movedResult.winner;
-        this.updateCapturedDisplay(movedResult.blackPawnsLost, movedResult.whitePawnsLost);
+        this.blackPawnsLost = movedResult.blackPawnsLost;
+        this.whitePawnsLost = movedResult.whitePawnsLost;
         this.cancelSelection();
         this.nextTurn();
       },
@@ -125,11 +129,6 @@ export class GameBoardComponent implements OnInit {
 
   onHover(direction: string | null) {
     this.hoveredDirection = direction;
-  }
-
-  updateCapturedDisplay(blackLost: number, whiteLost: number) {
-    this.capturedBlack = Array(6).fill(false).map((_, i) => i < blackLost);
-    this.capturedWhite = Array(6).fill(false).map((_, i) => i < whiteLost);
   }
 
   restartGame() {

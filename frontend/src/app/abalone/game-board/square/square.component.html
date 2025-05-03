@@ -1,0 +1,46 @@
+<div
+  [class.has-black-pawn]="square().hasBlackPawn()"
+  [class.has-white-pawn]="square().hasWhitePawn()"
+  [class.last-move]="inLastMovedPositions()"
+  [class.selected]="square().selected"
+  class="cell"
+>
+  <ng-container *ngIf="square().selected">
+    <div (mouseenter)="hoverDirection.emit('E')"
+         (mouseleave)="hoverDirection.emit(null)"
+         class="hover-zone hover-E">
+      <div (click)="moveDirection.emit('E')" [class.visible]="hoveredDirection() === 'E'"
+           class="arrow arrow-E"></div>
+    </div>
+    <div (mouseenter)="hoverDirection.emit('W')"
+         (mouseleave)="hoverDirection.emit(null)"
+         class="hover-zone hover-W">
+      <div (click)="moveDirection.emit('W')" [class.visible]="hoveredDirection() === 'W'"
+           class="arrow arrow-W"></div>
+    </div>
+    <div (mouseenter)="hoverDirection.emit('NE')"
+         (mouseleave)="hoverDirection.emit(null)"
+         class="hover-zone hover-NE">
+      <div (click)="moveDirection.emit('NE')" [class.visible]="hoveredDirection() === 'NE'"
+           class="arrow arrow-NE"></div>
+    </div>
+    <div (mouseenter)="hoverDirection.emit('NW')"
+         (mouseleave)="hoverDirection.emit(null)"
+         class="hover-zone hover-NW">
+      <div (click)="moveDirection.emit('NW')" [class.visible]="hoveredDirection() === 'NW'"
+           class="arrow arrow-NW"></div>
+    </div>
+    <div (mouseenter)="hoverDirection.emit('SE')"
+         (mouseleave)="hoverDirection.emit(null)"
+         class="hover-zone hover-SE">
+      <div (click)="moveDirection.emit('SE')" [class.visible]="hoveredDirection() === 'SE'"
+           class="arrow arrow-SE"></div>
+    </div>
+    <div (mouseenter)="hoverDirection.emit('SW')"
+         (mouseleave)="hoverDirection.emit(null)"
+         class="hover-zone hover-SW">
+      <div (click)="moveDirection.emit('SW')" [class.visible]="hoveredDirection() === 'SW'"
+           class="arrow arrow-SW"></div>
+    </div>
+  </ng-container>
+</div>

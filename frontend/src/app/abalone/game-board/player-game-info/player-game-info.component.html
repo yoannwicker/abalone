@@ -1,0 +1,23 @@
+<div class="player-info-container">
+  <div *ngIf="player() === Player.BLACK" class="player-label">
+    <span class="player-icon-logo">⚫</span>
+    <span class="label-text">Joueur</span>
+  </div>
+  <div *ngIf="player() === Player.WHITE" class="player-label">
+    <span class="player-icon-logo">⚪</span>
+    <span class="label-text">Adversaire</span>
+  </div>
+  <!-- Pions perdus -->
+  <div [class.black]="player() === Player.WHITE"
+       [class.white]="player() === Player.BLACK"
+       class="lost-pawns">
+    <div [class.black]="player() === Player.WHITE"
+         [class.white]="player() === Player.BLACK"
+         class="captured-pawns captured-pawns-row">
+      <div *ngFor="let filled of capturedPawnsForDisplay"
+           [class.filled]="filled"
+           class="pawn">
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+
+.captured-pawns {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.captured-pawns-row {
+  display: flex;
+  justify-content: stretch;
+  gap: 10px; /* espace entre les pions */
+  margin: 5px;
+}
+
+.captured-pawns-row .pawn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px dashed #bbb;
+}
+
+.captured-pawns-row.black .pawn.filled {
+  background-color: black;
+  border: 2px solid #333;
+}
+
+.captured-pawns-row.white .pawn.filled {
+  background-color: white;
+  border: 2px solid #333;
+}
+
+.player-label {
+  display: flex;
+  gap: 8px;
+  height: 40px;
+}
+
+.label-text {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.player-icon-logo {
+  padding-top: 8px;
+  font-size: 30px;
+}
