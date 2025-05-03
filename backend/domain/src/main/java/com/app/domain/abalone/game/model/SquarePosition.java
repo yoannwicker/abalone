@@ -1,11 +1,11 @@
 package com.app.domain.abalone.game.model;
 
 import static com.app.domain.abalone.game.model.BoardLine.*;
+import static com.app.domain.abalone.game.model.Direction.directionOf;
 
 import java.util.Arrays;
 import java.util.Optional;
 
-// TODO: renommer pour Position ?
 public enum SquarePosition {
   A1(A, 1),
   A2(A, 2),
@@ -77,71 +77,45 @@ public enum SquarePosition {
     this.number = number;
   }
 
-  public static Optional<SquarePosition> from(Optional<BoardLine> lineOptional, int number) {
+  private static Optional<SquarePosition> fromName(String positionName) {
     return Arrays.stream(SquarePosition.values())
-        .filter(position -> position.number == number)
-        .filter(
-            position ->
-                lineOptional.map(character -> character.equals(position.line)).orElse(false))
+        .filter(position -> position.name().equalsIgnoreCase(positionName))
         .findAny();
   }
 
+  public Optional<SquarePosition> nextInXAxis() {
+    return fromName(line.name() + (number + 1));
+  }
+
+  public Optional<SquarePosition> previousInXAxis() {
+    return fromName(line.name() + (number - 1));
+  }
+
+  public Optional<SquarePosition> nextInYAxis() {
+    return line.next().flatMap(l -> fromName(l.name() + (number + 1)));
+  }
+
+  public Optional<SquarePosition> previousInYAxis() {
+    return line.previous().flatMap(l -> fromName(l.name() + (number - 1)));
+  }
+
+  public Optional<SquarePosition> nextInZAxis() {
+    return line.next().flatMap(l -> fromName(l.name() + number));
+  }
+
+  public Optional<SquarePosition> previousInZAxis() {
+    return line.previous().flatMap(l -> fromName(l.name() + number));
+  }
+
   public boolean isAdjacent(SquarePosition squarePosition) {
-    return isXLineNeighbor(squarePosition)
-        || isYDiagonalNeighbor(squarePosition)
-        || isZDiagonalNeighbor(squarePosition);
-  }
-
-  private boolean isXLineNeighbor(SquarePosition squarePosition) {
-    return line.equals(squarePosition.line) && Math.abs(number - squarePosition.number) == 1;
-  }
-
-  private boolean isYDiagonalNeighbor(SquarePosition squarePosition) {
-    return Math.abs(line.ordinal() - squarePosition.line.ordinal()) == 1
-        && number == squarePosition.number;
-  }
-
-  private boolean isZDiagonalNeighbor(SquarePosition squarePosition) {
-    return line.equals(squarePosition.line.next().orElse(null))
-            && number - squarePosition.number == 1
-        || line.equals(squarePosition.line.previous().orElse(null))
-            && number - squarePosition.number == -1;
+    return Direction.isAdjacent(this, squarePosition);
   }
 
   public Optional<SquarePosition> next(Direction direction) {
-    return switch (direction) {
-      case MOVE_FORWARD_X -> from(Optional.of(line), number + 1);
-      case MOVE_BACK_X -> from(Optional.of(line), number - 1);
-      case MOVE_FORWARD_Y -> from(line.next(), number + 1);
-      case MOVE_BACK_Y -> from(line.previous(), number - 1);
-      case MOVE_FORWARD_Z -> from(line.next(), number);
-      case MOVE_BACK_Z -> from(line.previous(), number);
-    };
+    return direction.next(this);
   }
 
   public Direction directionTo(SquarePosition nextPosition) {
-    if (nextPosition.line == line) {
-      return nextPosition.number > number ? Direction.MOVE_FORWARD_X : Direction.MOVE_BACK_X;
-    }
-
-    if (nextPosition.line.equals(line.next().orElse(null))) {
-      if (nextPosition.number == number) {
-        return Direction.MOVE_FORWARD_Z;
-      }
-      return Direction.MOVE_FORWARD_Y;
-    }
-
-    if (nextPosition.line.equals(line.previous().orElse(null))) {
-      if (nextPosition.number == number) {
-        return Direction.MOVE_BACK_Z;
-      }
-      return Direction.MOVE_BACK_Y;
-    }
-
-    throw new IllegalArgumentException(
-        "The next position "
-            + nextPosition
-            + " is not in the same line or the next line of "
-            + this);
+    return directionOf(this, nextPosition);
   }
 }
