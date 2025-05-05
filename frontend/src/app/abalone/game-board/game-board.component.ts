@@ -42,10 +42,18 @@ export class GameBoardComponent implements OnInit {
       || !cell.hasPawnBelongingPlayer(this.playerTurn)) {
       return;
     }
+    const intermediateSquare = this.getIntermediateSquareOfSelectedPosition(cell)
+    if (!cell.selected && !intermediateSquare && !this.isAdjacentOfSelectedPosition(cell)) {
+      this.snackBar.open('Vous ne pouvez pas sélectionner ce pion', 'Fermer', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top'
+      });
+      return;
+    }
     cell.selected = !cell.selected;
     if (cell.selected) {
       this.selectedPositions.push(cell.position);
-      const intermediateSquare = this.getIntermediateSquare()
       if (intermediateSquare && intermediateSquare.hasPawnBelongingPlayer(this.playerTurn)) {
         intermediateSquare.selected = true;
         this.selectedPositions.push(intermediateSquare.position);
@@ -146,22 +154,37 @@ export class GameBoardComponent implements OnInit {
     return player === Player.BLACK ? Player.WHITE : Player.BLACK;
   }
 
-  private getIntermediateSquare(): Square | undefined {
-    if (this.selectedPositions.length !== 2) {
+  private getIntermediateSquareOfSelectedPosition(newSquareSelected: Square): Square | undefined {
+    if (this.selectedPositions.length !== 1) {
       return;
     }
-    const square1 = this.getSquare(this.selectedPositions[0]);
-    const square2 = this.getSquare(this.selectedPositions[1]);
+    const squareAlreadySelected = this.getSquare(this.selectedPositions[0]);
 
-    if (!square1 || !square2) {
+    if (!squareAlreadySelected) {
       return;
     }
-    const intermediatePosition = square1.intermediatePositionWith(square2)
+    const intermediatePosition = squareAlreadySelected.intermediatePositionWith(newSquareSelected)
     if (!intermediatePosition) {
       return;
     }
 
     return this.getSquare(intermediatePosition);
+  }
+
+  private isAdjacentOfSelectedPosition(cell: Square): boolean {
+    if (this.selectedPositions.length > 2) {
+      return false;
+    }
+    if (this.selectedPositions.length === 0) {
+      return true;
+    }
+    const square1 = this.getSquare(this.selectedPositions[0]);
+    const square1isAdjacent = cell?.isAdjacentOf(square1);
+    if (this.selectedPositions.length === 2) {
+      const square2 = this.getSquare(this.selectedPositions[1]);
+      return square1isAdjacent || cell?.isAdjacentOf(square2);
+    }
+    return square1isAdjacent
   }
 
   private cancelSelection() {

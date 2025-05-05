@@ -27,12 +27,7 @@ export class Square {
   }
 
   intermediatePositionWith(square: Square): string | null {
-    const positionLineDiff = Math.abs(this.positionLine - square.positionLine);
-    const positionNumberDiff = Math.abs(this.positionNumber - square.positionNumber);
-
-    if (this.positionLine === square.positionLine && positionNumberDiff === 2
-      || this.positionNumber === square.positionNumber && positionLineDiff === 2
-      || positionNumberDiff === 2 && positionLineDiff === 2) {
+    if (this.isSeparatedBy(2, square)) {
       const targetLineNumber = (this.positionLine + square.positionLine) / 2;
       const targetLine = String.fromCharCode('A'.charCodeAt(0) + targetLineNumber);
       const targetNumber = (this.positionNumber + square.positionNumber) / 2;
@@ -40,5 +35,21 @@ export class Square {
     }
 
     return null;
+  }
+
+  isAdjacentOf(square: Square | undefined): boolean {
+    if (!square) {
+      return false;
+    }
+    return this.isSeparatedBy(1, square);
+  }
+
+  private isSeparatedBy(distance: number, square: Square): boolean {
+    const positionLineDiff = Math.abs(this.positionLine - square.positionLine);
+    const positionNumberDiff = Math.abs(this.positionNumber - square.positionNumber);
+
+    return this.positionLine === square.positionLine && positionNumberDiff === distance
+      || this.positionNumber === square.positionNumber && positionLineDiff === distance
+      || positionNumberDiff === distance && positionLineDiff === distance;
   }
 }
