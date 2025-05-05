@@ -45,6 +45,11 @@ export class GameBoardComponent implements OnInit {
     cell.selected = !cell.selected;
     if (cell.selected) {
       this.selectedPositions.push(cell.position);
+      const intermediateSquare = this.getIntermediateSquare()
+      if (intermediateSquare && intermediateSquare.hasPawnBelongingPlayer(this.playerTurn)) {
+        intermediateSquare.selected = true;
+        this.selectedPositions.push(intermediateSquare.position);
+      }
     } else {
       this.selectedPositions = this.selectedPositions.filter(position => position !== cell.position);
     }
@@ -139,6 +144,24 @@ export class GameBoardComponent implements OnInit {
 
   protected otherPlayer(player: Player | undefined) {
     return player === Player.BLACK ? Player.WHITE : Player.BLACK;
+  }
+
+  private getIntermediateSquare(): Square | undefined {
+    if (this.selectedPositions.length !== 2) {
+      return;
+    }
+    const square1 = this.getSquare(this.selectedPositions[0]);
+    const square2 = this.getSquare(this.selectedPositions[1]);
+
+    if (!square1 || !square2) {
+      return;
+    }
+    const intermediatePosition = square1.intermediatePositionWith(square2)
+    if (!intermediatePosition) {
+      return;
+    }
+
+    return this.getSquare(intermediatePosition);
   }
 
   private cancelSelection() {
