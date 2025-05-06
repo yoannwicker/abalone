@@ -12,7 +12,7 @@ public final class Move {
 
   private final Set<Pawn> pawns;
   private final Direction direction;
-  private final boolean isSideways;
+  private final boolean isLateralMove;
 
   public Move(Set<Pawn> pawns, Direction direction) {
     if (pawns.isEmpty()) {
@@ -29,7 +29,7 @@ public final class Move {
     if (!allPawnsFollowedLineInAnyDirection(pawns)) {
       throw new IllegalArgumentException("Cannot move not followed pawns");
     }
-    this.isSideways = !allPawnsFollowedInLineOfDirection(pawns, direction);
+    this.isLateralMove = !allPawnsFollowedInLineOfDirection(pawns, direction);
   }
 
   public Move(Pawn pawn, Direction direction) {
@@ -104,7 +104,7 @@ public final class Move {
     return direction;
   }
 
-  public boolean isSideways() {
-    return isSideways;
+  public boolean isLateralMove() {
+    return isLateralMove;
   }
 }

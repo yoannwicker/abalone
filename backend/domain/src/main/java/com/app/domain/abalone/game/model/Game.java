@@ -61,17 +61,22 @@ public class Game {
       throw new IllegalArgumentException("Illegal move " + move);
     }
 
-    if (move.isSideways()
-        && move.movePawns().stream()
-            .anyMatch(
-                pawnProjection ->
-                    blackPlayerPawns.hasPawnAtSamePosition(pawnProjection)
-                        || whitePlayerPawns.hasPawnAtSamePosition(pawnProjection))) {
+    if (move.isLateralMove() && move.movePawns().stream().anyMatch(this::isPositionOccupied)) {
       throw new IllegalStateException("Cannot move sideways to occupied square");
     }
 
+    var maybePawnInFrontProjection = move.getPawnInFront().projected(move.direction());
+    var isPawnInFrontProjectionFree =
+        !maybePawnInFrontProjection.map(this::isPositionOccupied).orElse(false);
+    boolean canMoveWithoutPushingOpponent = move.isLateralMove() || isPawnInFrontProjectionFree;
     Set<Pawn> opponentPawnsToPush =
-        move.isSideways() ? emptySet() : collectOpponentPawnsToPush(move);
+        canMoveWithoutPushingOpponent
+            ? emptySet()
+            : maybePawnInFrontProjection
+                .map(
+                    pawnInFrontProjection ->
+                        collectOpponentPawnsToPush(move, pawnInFrontProjection))
+                .orElseThrow();
 
     var movedPawns = move.movePawns();
     var movedOpponentPawns =
@@ -103,48 +108,36 @@ public class Game {
     return playResult;
   }
 
-  // TODO: cette methode fait trop de chose : a renommer ou a inline + split
-  private Set<Pawn> collectOpponentPawnsToPush(Move move) {
-    var pawnProjection = move.getPawnInFront().projected(move.direction());
-    return pawnProjection
-        .map(
-            pawn -> {
-              if (blackPlayerPawns.hasPawnAtSamePosition(pawn)
-                  || whitePlayerPawns.hasPawnAtSamePosition(pawn)) {
-                var opponentPawn = pawn.toOpponentPawn();
-                if (blackPlayerPawns.contains(opponentPawn)
-                    || whitePlayerPawns.contains(opponentPawn)) {
-                  boolean isGroupMove = move.pawns().size() > 1;
-                  Optional<Pawn> opponentPawnProjection = opponentPawn.projected(move.direction());
-                  boolean nextSquareOfOpponentPawnFree =
-                      opponentPawnProjection
-                          .map(
-                              next ->
-                                  !whitePlayerPawns.hasPawnAtSamePosition(next)
-                                      && !blackPlayerPawns.hasPawnAtSamePosition(next))
-                          .orElse(true);
+  private Set<Pawn> collectOpponentPawnsToPush(Move move, Pawn pawnInFrontProjection) {
+    var opponentPawn = pawnInFrontProjection.toOpponentPawn();
+    if (blackPlayerPawns.contains(opponentPawn) || whitePlayerPawns.contains(opponentPawn)) {
+      Optional<Pawn> opponentPawnProjection = opponentPawn.projected(move.direction());
+      if (move.pawns().size() > 1 && getNextSquareOfOpponentPawnFree(opponentPawnProjection)) {
+        return Set.of(opponentPawn);
+      }
 
-                  if (isGroupMove && nextSquareOfOpponentPawnFree) {
-                    return Set.of(opponentPawn);
-                  }
-                  Optional<Pawn> nextOpponentPawnProjection =
-                      opponentPawnProjection.flatMap(next -> next.projected(move.direction()));
-                  boolean nextSquareOfNextOpponentPawnFree =
-                      nextOpponentPawnProjection
-                          .map(
-                              next ->
-                                  !whitePlayerPawns.hasPawnAtSamePosition(next)
-                                      && !blackPlayerPawns.hasPawnAtSamePosition(next))
-                          .orElse(true);
-                  if (move.pawns().size() > 2 && nextSquareOfNextOpponentPawnFree) {
-                    return Set.of(opponentPawn, opponentPawnProjection.orElseThrow());
-                  }
-                }
-                throw new IllegalStateException("Cannot move pawn to occupied square at " + pawn);
-              }
-              return new HashSet<Pawn>();
-            })
-        .orElse(new HashSet<>());
+      Optional<Pawn> nextOpponentPawnProjection =
+          opponentPawnProjection.flatMap(pawn -> pawn.projected(move.direction()));
+      if (move.pawns().size() > 2 && getNextSquareOfOpponentPawnFree(nextOpponentPawnProjection)) {
+        return Set.of(opponentPawn, opponentPawnProjection.orElseThrow());
+      }
+    }
+    throw new IllegalStateException(
+        "Cannot move pawn to occupied square at " + pawnInFrontProjection);
+  }
+
+  private boolean isPositionOccupied(Pawn pawnProjection) {
+    return blackPlayerPawns.hasPawnAtSamePosition(pawnProjection)
+        || whitePlayerPawns.hasPawnAtSamePosition(pawnProjection);
+  }
+
+  private Boolean getNextSquareOfOpponentPawnFree(Optional<Pawn> opponentPawnProjection) {
+    return opponentPawnProjection
+        .map(
+            next ->
+                !whitePlayerPawns.hasPawnAtSamePosition(next)
+                    && !blackPlayerPawns.hasPawnAtSamePosition(next))
+        .orElse(true);
   }
 
   public PlayResult drawMatch() {
