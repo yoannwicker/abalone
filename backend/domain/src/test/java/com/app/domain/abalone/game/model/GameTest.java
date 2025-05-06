@@ -1,8 +1,6 @@
 package com.app.domain.abalone.game.model;
 
-import static com.app.domain.abalone.game.model.PawnFixture.blackPawnMidboard;
 import static com.app.domain.abalone.game.model.PawnFixture.blackPawns;
-import static com.app.domain.abalone.game.model.PawnFixture.whitePawnMidboard;
 import static com.app.domain.abalone.game.model.PawnFixture.whitePawns;
 import static com.app.domain.abalone.game.model.Player.BLACK;
 import static com.app.domain.abalone.game.model.Player.WHITE;
@@ -41,21 +39,21 @@ class GameTest {
     @Test
     void white_player_should_not_be_able_to_play_first() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       // when then
-      assertThatThrownBy(() -> game.play(WHITE, anyBlackMove))
+      assertThatThrownBy(() -> initialGame.play(WHITE, anyBlackMove))
           .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void player_should_not_be_able_to_play_if_it_is_not_his_turn() {
       // given
-      Game game = new Game();
-      game.play(BLACK, anyBlackMove);
+      Game initialGame = new Game();
+      initialGame.play(BLACK, anyBlackMove);
 
       // when then
-      assertThatThrownBy(() -> game.play(BLACK, anyBlackMove))
+      assertThatThrownBy(() -> initialGame.play(BLACK, anyBlackMove))
           .isInstanceOf(IllegalArgumentException.class);
     }
   }
@@ -174,12 +172,12 @@ class GameTest {
     @Test
     void move_forward_one_pawn_in_X() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn pawn = new Pawn(BLACK, C5);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       var expectedPawn = new Pawn(BLACK, C6);
@@ -190,13 +188,13 @@ class GameTest {
     @Test
     void move_back_one_pawn_in_X() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       Pawn pawn = new Pawn(BLACK, C3);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_BACK_X);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       var expectedPawn = new Pawn(BLACK, C2);
@@ -207,13 +205,13 @@ class GameTest {
     @Test
     void move_forward_one_pawn_in_Y() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       Pawn pawn = new Pawn(BLACK, C3);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_FORWARD_Y);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       var expectedPawn = new Pawn(BLACK, D4);
@@ -224,16 +222,16 @@ class GameTest {
     @Test
     void move_back_one_pawn_in_Y() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       Pawn blackPawn = new Pawn(BLACK, C3);
-      game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Y));
+      initialGame.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Y));
 
       Pawn pawn = new Pawn(WHITE, G7);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_BACK_Y);
-      var playResult = game.play(WHITE, move);
+      var playResult = initialGame.play(WHITE, move);
 
       // then
       var expectedPawn = new Pawn(WHITE, F6);
@@ -244,12 +242,12 @@ class GameTest {
     @Test
     void move_forward_one_pawn_in_Z() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn pawn = new Pawn(BLACK, C3);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_FORWARD_Z);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       var expectedPawn = new Pawn(BLACK, D3);
@@ -260,16 +258,16 @@ class GameTest {
     @Test
     void move_back_one_pawn_in_Z() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       Pawn blackPawn = new Pawn(BLACK, C3);
-      game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Z));
+      initialGame.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_Z));
 
       Pawn pawn = new Pawn(WHITE, G7);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_BACK_Z);
-      var playResult = game.play(WHITE, move);
+      var playResult = initialGame.play(WHITE, move);
 
       // then
       var expectedPawn = new Pawn(WHITE, F7);
@@ -280,97 +278,113 @@ class GameTest {
     @Test
     void should_not_be_able_to_move_a_non_existent_black_pawn() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn pawn = new Pawn(BLACK, C6);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
-      assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalArgumentException.class);
-      assertThatNoPawnLost(game);
+      assertThatThrownBy(() -> initialGame.play(BLACK, move))
+          .isInstanceOf(IllegalArgumentException.class);
+      assertThatNoPawnLost(initialGame);
     }
 
     @Test
     void should_not_be_able_to_move_a_non_existent_white_pawn() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       Pawn blackPawn = new Pawn(BLACK, C5);
-      game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
+      initialGame.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
 
       Pawn pawn = new Pawn(WHITE, G4);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_BACK_X);
-      assertThatThrownBy(() -> game.play(WHITE, move)).isInstanceOf(IllegalArgumentException.class);
-      assertThatNoPawnLost(game);
+      assertThatThrownBy(() -> initialGame.play(WHITE, move))
+          .isInstanceOf(IllegalArgumentException.class);
+      assertThatNoPawnLost(initialGame);
     }
 
     @Test
     void should_be_able_to_move_the_same_pawn() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       var blackPlayResult =
-          game.play(BLACK, new Move(new Pawn(BLACK, C5), Direction.MOVE_FORWARD_X));
-      var whitePlayResult = game.play(WHITE, new Move(new Pawn(WHITE, G5), Direction.MOVE_BACK_X));
+          initialGame.play(BLACK, new Move(new Pawn(BLACK, C5), Direction.MOVE_FORWARD_X));
+      var whitePlayResult =
+          initialGame.play(WHITE, new Move(new Pawn(WHITE, G5), Direction.MOVE_BACK_X));
 
       // when then
       assertThatCode(
               () -> {
-                game.play(BLACK, new Move(blackPlayResult.movedPawns(), Direction.MOVE_FORWARD_X));
-                game.play(WHITE, new Move(whitePlayResult.movedPawns(), Direction.MOVE_BACK_X));
+                initialGame.play(
+                    BLACK, new Move(blackPlayResult.movedPawns(), Direction.MOVE_FORWARD_X));
+                initialGame.play(
+                    WHITE, new Move(whitePlayResult.movedPawns(), Direction.MOVE_BACK_X));
               })
           .doesNotThrowAnyException();
-      assertThatNoPawnLost(game);
+      assertThatNoPawnLost(initialGame);
     }
 
     @Test
     void should_not_be_able_to_move_a_black_pawn_when_there_is_already_a_black_pawn_on_it() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn pawn = new Pawn(BLACK, C5);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_BACK_X);
-      assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatNoPawnLost(game);
+      assertThatThrownBy(() -> initialGame.play(BLACK, move))
+          .isInstanceOf(IllegalStateException.class);
+      assertThatNoPawnLost(initialGame);
     }
 
     @Test
     void should_not_be_able_to_move_a_white_pawn_when_there_is_already_a_white_pawn_on_it() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
       Pawn blackPawn = new Pawn(BLACK, C5);
-      game.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
+      initialGame.play(BLACK, new Move(blackPawn, Direction.MOVE_FORWARD_X));
 
       Pawn pawn = new Pawn(WHITE, G5);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
-      assertThatThrownBy(() -> game.play(WHITE, move)).isInstanceOf(IllegalStateException.class);
-      assertThatNoPawnLost(game);
+      assertThatThrownBy(() -> initialGame.play(WHITE, move))
+          .isInstanceOf(IllegalStateException.class);
+      assertThatNoPawnLost(initialGame);
     }
 
     @Test
     void should_not_be_able_to_move_a_black_pawn_when_there_is_already_a_white_pawn_on_it() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard());
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      Game initialGame =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
+      assertThatPawnLost(initialGame.blackPlayerPawns, 4);
+      assertThatPawnLost(initialGame.whitePlayerPawns, 2);
       Pawn pawn = new Pawn(BLACK, E5);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
-      assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatThrownBy(() -> initialGame.play(BLACK, move))
+          .isInstanceOf(IllegalStateException.class);
+      assertThatPawnLost(initialGame.blackPlayerPawns, 4);
+      assertThatPawnLost(initialGame.whitePlayerPawns, 2);
     }
 
     @Test
     void should_not_be_able_to_move_a_white_pawn_when_there_is_already_a_black_pawn_on_it() {
       // given
-      Game game = new Game(WHITE, blackPawnMidboard(), whitePawnMidboard());
+      Game game =
+          new Game(
+              WHITE,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
       Pawn pawn = new Pawn(WHITE, F5);
@@ -385,13 +399,13 @@ class GameTest {
     @Test
     void should_lose_pawn() {
       // given
-      Game game = new Game();
-      assertThatNoPawnLost(game);
+      Game initialGame = new Game();
+      assertThatNoPawnLost(initialGame);
       Pawn pawn = new Pawn(BLACK, A1);
 
       // when
       Move move = new Move(pawn, Direction.MOVE_BACK_X);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       assertThat(playResult.movedPawns()).isEmpty();
@@ -457,14 +471,14 @@ class GameTest {
     @Test
     void move_two_pawns() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn firstPawn = new Pawn(BLACK, B2);
       Pawn secondPawn = new Pawn(BLACK, C3);
 
       // when
       LinkedHashSet<Pawn> pawnsToMove = new LinkedHashSet<>(List.of(firstPawn, secondPawn));
       Move move = new Move(pawnsToMove, Direction.MOVE_FORWARD_Y);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       var expectedFirstPawn = new Pawn(BLACK, C3);
@@ -477,15 +491,15 @@ class GameTest {
     @Test
     void move_two_pawns_and_lose_one_pawn() {
       // given
-      Game game = new Game();
-      assertThatNoPawnLost(game);
+      Game initialGame = new Game();
+      assertThatNoPawnLost(initialGame);
 
       Pawn firstPawn = new Pawn(BLACK, A1);
       Pawn secondPawn = new Pawn(BLACK, B2);
 
       // when
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_BACK_Y);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       var expectedPawn = new Pawn(BLACK, A1);
@@ -552,20 +566,25 @@ class GameTest {
     @Test
     void should_not_be_able_to_move_two_black_pawns_when_there_is_already_a_black_pawn_on_it() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn firstPawn = new Pawn(BLACK, A1);
       Pawn secondPawn = new Pawn(BLACK, B2);
 
       // when then
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
-      assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatNoPawnLost(game);
+      assertThatThrownBy(() -> initialGame.play(BLACK, move))
+          .isInstanceOf(IllegalStateException.class);
+      assertThatNoPawnLost(initialGame);
     }
 
     @Test
     void move_two_black_pawns_and_one_white_pawn() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard());
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
       Pawn firstPawn = new Pawn(BLACK, C5);
@@ -647,7 +666,11 @@ class GameTest {
     @Test
     void move_two_white_pawns_and_one_black_pawn() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard());
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
 
       Pawn firstBlackPawn = new Pawn(BLACK, C5);
       Pawn secondBlackPawn = new Pawn(BLACK, D6);
@@ -677,7 +700,11 @@ class GameTest {
     @Test
     void should_not_be_able_to_move_two_black_pawns_when_there_is_two_white_pawns_in_front() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard());
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
@@ -695,7 +722,11 @@ class GameTest {
     void
         should_not_be_able_to_move_two_black_pawns_when_there_is_one_white_pawn_one_black_pawn_in_front() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(new Pawn(BLACK, F8)), whitePawnMidboard());
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6, F8),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       assertThatPawnLost(game.blackPlayerPawns, 3);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
@@ -716,7 +747,7 @@ class GameTest {
     @Test
     void move_three_black_pawns() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn firstPawn = new Pawn(BLACK, A1);
       Pawn secondPawn = new Pawn(BLACK, B2);
       Pawn thirdPawn = new Pawn(BLACK, C3);
@@ -724,7 +755,7 @@ class GameTest {
       // when
       Set<Pawn> pawnsToMove = Set.of(firstPawn, secondPawn, thirdPawn);
       Move move = new Move(pawnsToMove, Direction.MOVE_FORWARD_Y);
-      var playResult = game.play(BLACK, move);
+      var playResult = initialGame.play(BLACK, move);
 
       // then
       var expectedFirstPawn = new Pawn(BLACK, B2);
@@ -738,9 +769,9 @@ class GameTest {
     @Test
     void move_three_white_pawns() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
 
-      game.play(BLACK, new Move(Set.of(new Pawn(BLACK, C3)), Direction.MOVE_FORWARD_Y));
+      initialGame.play(BLACK, new Move(Set.of(new Pawn(BLACK, C3)), Direction.MOVE_FORWARD_Y));
 
       Pawn firstPawn = new Pawn(WHITE, I9);
       Pawn secondPawn = new Pawn(WHITE, H8);
@@ -749,7 +780,7 @@ class GameTest {
       // when
       Set<Pawn> pawnsToMove = Set.of(firstPawn, secondPawn, thirdPawn);
       Move move = new Move(pawnsToMove, Direction.MOVE_BACK_Y);
-      var playResult = game.play(WHITE, move);
+      var playResult = initialGame.play(WHITE, move);
 
       // then
       var expectedFirstPawn = new Pawn(WHITE, F6);
@@ -792,7 +823,11 @@ class GameTest {
     @Test
     void move_three_black_pawns_and_two_white_pawns() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard());
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
@@ -825,7 +860,11 @@ class GameTest {
     @Test
     void move_three_white_pawns_and_two_black_pawns() {
       // given
-      Game game = new Game(WHITE, blackPawnMidboard(), whitePawnMidboard());
+      Game game =
+          new Game(
+              WHITE,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       Pawn firstPawn = new Pawn(WHITE, F6);
       Pawn secondPawn = new Pawn(WHITE, G6);
       Pawn thirdPawn = new Pawn(WHITE, H6);
@@ -857,7 +896,11 @@ class GameTest {
     @Test
     void should_not_be_able_to_move_three_black_pawns_when_there_is_three_white_pawns_in_front() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard(new Pawn(WHITE, H9)));
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7, H9));
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 1);
 
@@ -876,7 +919,11 @@ class GameTest {
     void
         should_not_be_able_to_move_three_black_pawns_when_there_is_two_white_pawns_one_black_pawn_in_front() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(new Pawn(BLACK, H9)), whitePawnMidboard());
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6, H9),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       assertThatPawnLost(game.blackPlayerPawns, 3);
       assertThatPawnLost(game.whitePlayerPawns, 2);
 
@@ -1030,7 +1077,11 @@ class GameTest {
     @Test
     void should_not_be_able_to_move_two_black_pawns_to_side_and_one_white_pawn() {
       // given
-      Game game = new Game(BLACK, blackPawnMidboard(), whitePawnMidboard());
+      Game game =
+          new Game(
+              BLACK,
+              blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
+              whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
       assertThatPawnLost(game.blackPlayerPawns, 4);
       assertThatPawnLost(game.whitePlayerPawns, 2);
       Pawn firstPawn = new Pawn(BLACK, C6);
@@ -1046,13 +1097,14 @@ class GameTest {
     @Test
     void should_not_be_able_to_move_two_black_pawns_to_side_and_one_black_pawn() {
       // given
-      Game game = new Game();
+      Game initialGame = new Game();
       Pawn firstPawn = new Pawn(BLACK, A1);
       Pawn secondPawn = new Pawn(BLACK, B2);
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Z);
 
       // when then
-      assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
+      assertThatThrownBy(() -> initialGame.play(BLACK, move))
+          .isInstanceOf(IllegalStateException.class);
     }
   }
 

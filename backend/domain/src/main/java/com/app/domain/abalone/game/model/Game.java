@@ -1,5 +1,7 @@
 package com.app.domain.abalone.game.model;
 
+import static com.app.domain.abalone.game.model.PlayerPawns.initalBlackPlayerPawns;
+import static com.app.domain.abalone.game.model.PlayerPawns.initalWhitePlayerPawns;
 import static java.util.Collections.emptySet;
 
 import java.util.*;
@@ -15,8 +17,8 @@ public class Game {
 
   public Game() {
     this.playerTurn = Player.BLACK;
-    this.blackPlayerPawns = new PlayerPawns(Player.BLACK, Pawn.createBlackPawns());
-    this.whitePlayerPawns = new PlayerPawns(Player.WHITE, Pawn.createWhitePawns());
+    this.blackPlayerPawns = initalBlackPlayerPawns();
+    this.whitePlayerPawns = initalWhitePlayerPawns();
     this.gameStatus =
         new GameStatus(blackPlayerPawns.lostPawnsCount(), whitePlayerPawns.lostPawnsCount());
   }
