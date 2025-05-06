@@ -78,22 +78,16 @@ public final class Move {
         .toList();
   }
 
+  public PawnsToMove pawnsToMove() {
+    return new PawnsToMove(pawns, direction, isLateralMove);
+  }
+
+  @Deprecated
   public Set<Pawn> movePawns() {
     return pawns.stream()
         .map(pawn -> pawn.projected(direction))
         .flatMap(Optional::stream)
         .collect(Collectors.toSet());
-  }
-
-  public Pawn getPawnInFront() {
-    return pawns.stream()
-        .filter(
-            pawn ->
-                pawn.projected(direction)
-                    .map(pawnProjection -> !pawns.contains(pawnProjection))
-                    .orElse(true))
-        .findAny()
-        .orElseThrow();
   }
 
   public Set<Pawn> pawns() {
@@ -102,9 +96,5 @@ public final class Move {
 
   public Direction direction() {
     return direction;
-  }
-
-  public boolean isLateralMove() {
-    return isLateralMove;
   }
 }

@@ -27,4 +27,8 @@ public record Pawn(Player player, SquarePosition squarePosition) {
   public Direction directionTo(Pawn pawnProjection) {
     return this.squarePosition.directionTo(pawnProjection.squarePosition());
   }
+
+  public boolean hasSamePositionOf(Pawn pawn) {
+    return this.squarePosition.equals(pawn.squarePosition());
+  }
 }

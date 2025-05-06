@@ -68,6 +68,7 @@ public record PlayerPawns(Player playerOwner, Set<Pawn> pawns) {
     return new PlayerPawns(WHITE, fromPawnsPositions(WHITE, WHITE_PAWN_INITIAL_POSITIONS));
   }
 
+  @Deprecated
   public boolean contains(Pawn pawn) {
     return pawns.contains(pawn);
   }
@@ -77,16 +78,29 @@ public record PlayerPawns(Player playerOwner, Set<Pawn> pawns) {
         && move.pawns().stream().noneMatch(pawns::contains);
   }
 
-  public boolean hasPawnAtSamePosition(Pawn pawn) {
-    return pawns.stream().anyMatch(p -> p.squarePosition().equals(pawn.squarePosition()));
+  public boolean hasPawnOverlapPosition(PawnsToMove pawnsToMove) {
+    return pawns.stream().anyMatch(pawnsToMove::overlapFuturePositions);
   }
 
-  public void update(Set<Pawn> pawnsToUpdate, Set<Pawn> updatedPawns) {
-    pawns.removeAll(pawnsToUpdate);
-    pawns.addAll(updatedPawns);
+  public boolean hasNoPawnOverlapPosition(SquarePosition squarePosition) {
+    return pawns.stream().noneMatch(p -> p.squarePosition().equals(squarePosition));
+  }
+
+  public boolean hasOpponentPawnOverlapFuturePositionOf(PawnsToMove pawnsToMove) {
+    return pawns.stream().anyMatch(pawnsToMove::isOpponentOverlapFuturePositions);
   }
 
   public int lostPawnsCount() {
     return MAX_PAWNS - pawns.size();
+  }
+
+  public void update(PawnsToMove pawnsToMove) {
+    pawns.removeAll(pawnsToMove.pawns());
+    pawns.addAll(pawnsToMove.futurePawns());
+  }
+
+  public void update(OpponentPawnsToPush opponentPawnsToPush) {
+    pawns.removeAll(opponentPawnsToPush.pawnsToPush());
+    pawns.addAll(opponentPawnsToPush.futurePawns());
   }
 }

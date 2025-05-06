@@ -11,14 +11,17 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class GameTest {
 
+  public static final int INITIAL_PAWN_NUMBER = 14;
+
   private static void assertThatNoPawnLost(Game game) {
-    assertThatPawnLost(game.blackPlayerPawns, 0);
-    assertThatPawnLost(game.whitePlayerPawns, 0);
+    assertThatPawnLost(game::getBlackPawnPositions, 0);
+    assertThatPawnLost(game::getWhitePawnPositions, 0);
   }
 
   private static void assertThatNoPawnLost(PlayResult playResult) {
@@ -27,8 +30,9 @@ class GameTest {
         .containsExactly(0, 0, GameStatus.inProgress());
   }
 
-  private static void assertThatPawnLost(PlayerPawns game, int expected) {
-    assertThat(game).extracting(PlayerPawns::lostPawnsCount).isEqualTo(expected);
+  private static void assertThatPawnLost(
+      Supplier<Set<String>> pawnPositionsSupplier, int expected) {
+    assertThat(INITIAL_PAWN_NUMBER - pawnPositionsSupplier.get().size()).isEqualTo(expected);
   }
 
   @Nested
@@ -365,16 +369,16 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(initialGame.blackPlayerPawns, 4);
-      assertThatPawnLost(initialGame.whitePlayerPawns, 2);
+      assertThatPawnLost(initialGame::getBlackPawnPositions, 4);
+      assertThatPawnLost(initialGame::getWhitePawnPositions, 2);
       Pawn pawn = new Pawn(BLACK, E5);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_FORWARD_X);
       assertThatThrownBy(() -> initialGame.play(BLACK, move))
           .isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(initialGame.blackPlayerPawns, 4);
-      assertThatPawnLost(initialGame.whitePlayerPawns, 2);
+      assertThatPawnLost(initialGame::getBlackPawnPositions, 4);
+      assertThatPawnLost(initialGame::getWhitePawnPositions, 2);
     }
 
     @Test
@@ -385,15 +389,15 @@ class GameTest {
               WHITE,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
       Pawn pawn = new Pawn(WHITE, F5);
 
       // when then
       Move move = new Move(pawn, Direction.MOVE_BACK_X);
       assertThatThrownBy(() -> game.play(WHITE, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
     }
 
     @Test
@@ -422,8 +426,8 @@ class GameTest {
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
               whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 5);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 5);
 
       Pawn pawn = new Pawn(BLACK, A1);
 
@@ -447,8 +451,8 @@ class GameTest {
               WHITE,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
               whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7));
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 5);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 5);
 
       Pawn pawn = new Pawn(WHITE, I5);
 
@@ -517,8 +521,8 @@ class GameTest {
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
               whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 5);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 5);
 
       Pawn firstPawn = new Pawn(BLACK, A1);
       Pawn secondPawn = new Pawn(BLACK, B2);
@@ -544,8 +548,8 @@ class GameTest {
               WHITE,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
               whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 5);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 5);
 
       Pawn firstPawn = new Pawn(WHITE, I5);
       Pawn secondPawn = new Pawn(WHITE, I6);
@@ -585,8 +589,8 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
       Pawn firstPawn = new Pawn(BLACK, C5);
       Pawn secondPawn = new Pawn(BLACK, D6);
 
@@ -613,8 +617,8 @@ class GameTest {
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
               whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 5);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 5);
 
       Pawn firstPawn = new Pawn(BLACK, G4);
       Pawn secondPawn = new Pawn(BLACK, F4);
@@ -642,8 +646,8 @@ class GameTest {
               WHITE,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, G4, F4),
               whitePawns(I5, I6, I7, I8, I9, H4, H5, C2, D3));
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 5);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 5);
 
       Pawn firstPawn = new Pawn(WHITE, C2);
       Pawn secondPawn = new Pawn(WHITE, D3);
@@ -676,8 +680,8 @@ class GameTest {
       Pawn secondBlackPawn = new Pawn(BLACK, D6);
       Move blackMove = new Move(Set.of(firstBlackPawn, secondBlackPawn), Direction.MOVE_FORWARD_Y);
       game.play(BLACK, blackMove);
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
 
       Pawn firstWhitePawn = new Pawn(WHITE, F7);
       Pawn secondWhitePawn = new Pawn(WHITE, G7);
@@ -705,8 +709,8 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
 
       Pawn firstPawn = new Pawn(BLACK, D5);
       Pawn secondPawn = new Pawn(BLACK, E6);
@@ -714,8 +718,8 @@ class GameTest {
       // when then
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
       assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
     }
 
     @Test
@@ -727,8 +731,8 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6, F8),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(game.blackPlayerPawns, 3);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 3);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
 
       Pawn firstPawn = new Pawn(BLACK, C5);
       Pawn secondPawn = new Pawn(BLACK, D6);
@@ -736,8 +740,8 @@ class GameTest {
       // when then
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
       assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 3);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 3);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
     }
   }
 
@@ -828,8 +832,8 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
 
       Pawn firstPawn = new Pawn(BLACK, C4);
       Pawn secondPawn = new Pawn(BLACK, D5);
@@ -868,8 +872,8 @@ class GameTest {
       Pawn firstPawn = new Pawn(WHITE, F6);
       Pawn secondPawn = new Pawn(WHITE, G6);
       Pawn thirdPawn = new Pawn(WHITE, H6);
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
 
       // when
       Move move = new Move(Set.of(firstPawn, secondPawn, thirdPawn), Direction.MOVE_BACK_Z);
@@ -901,8 +905,8 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7, H9));
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 1);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 1);
 
       Pawn firstPawn = new Pawn(BLACK, C4);
       Pawn secondPawn = new Pawn(BLACK, D5);
@@ -911,8 +915,8 @@ class GameTest {
       // when then
       Move move = new Move(Set.of(firstPawn, secondPawn, thirdPawn), Direction.MOVE_FORWARD_Y);
       assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 1);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 1);
     }
 
     @Test
@@ -924,8 +928,8 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6, H9),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(game.blackPlayerPawns, 3);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 3);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
 
       Pawn firstPawn = new Pawn(BLACK, C4);
       Pawn secondPawn = new Pawn(BLACK, D5);
@@ -934,8 +938,8 @@ class GameTest {
       // when then
       Move move = new Move(Set.of(firstPawn, secondPawn, thirdPawn), Direction.MOVE_FORWARD_Y);
       assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 3);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 3);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
     }
   }
 
@@ -1082,16 +1086,16 @@ class GameTest {
               BLACK,
               blackPawns(C3, C4, C5, D3, D4, D5, D6, E4, E5, E6),
               whitePawns(H6, H7, G4, G5, G6, G7, G8, F4, F5, F6, F7, E7));
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
       Pawn firstPawn = new Pawn(BLACK, C6);
       Pawn secondPawn = new Pawn(BLACK, D6);
       Move move = new Move(Set.of(firstPawn, secondPawn), Direction.MOVE_FORWARD_Y);
 
       // when then
       assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 4);
-      assertThatPawnLost(game.whitePlayerPawns, 2);
+      assertThatPawnLost(game::getBlackPawnPositions, 4);
+      assertThatPawnLost(game::getWhitePawnPositions, 2);
     }
 
     @Test
@@ -1145,8 +1149,8 @@ class GameTest {
               BLACK,
               blackPawns(A1, A2, A3, A4, A5, B1, B2, B3, B4),
               whitePawns(I5, I6, I7, I8, I9, H4, H5, H6, H7, C2));
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 4);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 4);
       Pawn firstPawn = new Pawn(BLACK, B1);
       Pawn secondPawn = new Pawn(BLACK, B2);
       Pawn thirdPawn = new Pawn(BLACK, B3);
@@ -1154,8 +1158,8 @@ class GameTest {
 
       // when then
       assertThatThrownBy(() -> game.play(BLACK, move)).isInstanceOf(IllegalStateException.class);
-      assertThatPawnLost(game.blackPlayerPawns, 5);
-      assertThatPawnLost(game.whitePlayerPawns, 4);
+      assertThatPawnLost(game::getBlackPawnPositions, 5);
+      assertThatPawnLost(game::getWhitePawnPositions, 4);
     }
   }
 }
