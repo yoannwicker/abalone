@@ -47,13 +47,6 @@
   transition: background-color 0.3s ease;
 }
 
-@media (max-width: 600px) {
-  .cell {
-    width: 30px;
-    height: 30px;
-  }
-}
-
 .arrow {
   position: absolute;
   width: 10px;
@@ -107,4 +100,39 @@
   top: 105%;
   left: 0%;
   transform: translate(15%, -50%) rotate(210deg);
+}
+
+@media (max-width: 768px) {
+  .cell {
+    width: 34px;
+    height: 34px;
+  }
+
+  .cell.has-black-pawn::after {
+    width: 18px;
+    height: 18px;
+  }
+
+  .cell.has-white-pawn::after {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+
+@media (max-width: 380px) {
+  .cell {
+    width: 30px;
+    height: 30px;
+  }
+
+  .cell.has-black-pawn::after {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cell.has-white-pawn::after {
+    width: 16px;
+    height: 16px;
+  }
 }
