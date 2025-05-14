@@ -203,6 +203,8 @@ export class GameBoardComponent implements OnInit {
       const newGame = new Game(game.playerTurn, game.blackPawnPositions, game.whitePawnPositions);
       this.board = newGame.getSquareByRows();
       this.playerTurn = newGame.playerTurn;
+      this.blackPawnsLost = 0;
+      this.whitePawnsLost = 0;
     });
   }
 }
